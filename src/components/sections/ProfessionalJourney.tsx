@@ -389,6 +389,10 @@ export default function ProfessionalJourney() {
   const { ref, revealed } = useScrollReveal({ threshold: 0.05 })
   const milestones = useMemo(() => buildMilestones(), [])
   const { activeTech, setActiveTech } = usePortfolio()
+  const activeMilestone = useMemo(
+    () => milestones.find((m) => m.year === activeYear) ?? null,
+    [milestones, activeYear]
+  )
 
   const handleYearClick = useCallback(async (year: string) => {
     const idx = milestones.findIndex(m => m.year === year)
@@ -420,7 +424,7 @@ export default function ProfessionalJourney() {
       setEnteringYear(null)
 
       const node = document.querySelector(`[data-timeline-node="${idx}"]`)
-      if (node) smartScrollIntoView(node as HTMLElement, 120)
+      if (node instanceof HTMLElement && node.offsetParent !== null) smartScrollIntoView(node, 120)
       return
     }
 
@@ -431,7 +435,7 @@ export default function ProfessionalJourney() {
     setEnteringYear(null)
 
     const node = document.querySelector(`[data-timeline-node="${idx}"]`)
-    if (node) smartScrollIntoView(node as HTMLElement, 120)
+    if (node instanceof HTMLElement && node.offsetParent !== null) smartScrollIntoView(node, 120)
   }, [activeYear, milestones])
 
   return (
@@ -500,8 +504,40 @@ export default function ProfessionalJourney() {
             />
           </div>
 
-          <div className="md:hidden absolute left-[29px] top-0 w-[2px] h-full overflow-hidden">
-            <div className="w-full h-full" style={{ background: 'linear-gradient(to bottom, var(--accent), var(--accent-secondary), var(--accent-highlight), #6366f1, var(--accent))' }} />
+          <div className="md:hidden mb-6">
+            <div className="mb-3 flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2">
+              {milestones.map((m) => {
+                const selected = activeYear === m.year
+                return (
+                  <button key={m.year} onClick={() => handleYearClick(m.year)} className="snap-center">
+                    <motion.div
+                      whileTap={{ scale: 0.96 }}
+                      className="rounded-full border px-4 py-2 text-xs font-semibold"
+                      style={{
+                        borderColor: selected ? m.color : 'var(--border-subtle)',
+                        background: selected ? `color-mix(in srgb, ${m.color} 14%, transparent)` : 'var(--bg-surface)',
+                        color: selected ? m.color : 'var(--text-secondary)',
+                        boxShadow: selected ? `0 0 16px ${m.glowColor}` : 'none',
+                      }}
+                    >
+                      {m.year}
+                    </motion.div>
+                  </button>
+                )
+              })}
+            </div>
+
+            <AnimatePresence mode="wait">
+              {activeMilestone && (
+                <AnimatedCard
+                  key={`mobile-${activeMilestone.year}`}
+                  milestone={activeMilestone}
+                  activeTech={activeTech}
+                  setActiveTech={setActiveTech}
+                  animState="visible"
+                />
+              )}
+            </AnimatePresence>
           </div>
 
           <div className="space-y-16 md:space-y-24">
@@ -515,29 +551,6 @@ export default function ProfessionalJourney() {
               return (
                 <div key={m.year} className="relative">
                   <div className="flex flex-col md:flex-row md:items-start gap-6 md:gap-0">
-                    <div className="md:hidden flex flex-col items-start w-full pl-16">
-                      <button onClick={() => handleYearClick(m.year)} className="relative mb-4 -ml-16">
-                        <MobileBubble
-                          year={m.year}
-                          color={m.color}
-                          glowColor={m.glowColor}
-                          isExpanded={isExpanded}
-                          isExiting={isExiting}
-                        />
-                      </button>
-                      <AnimatePresence>
-                        {showCard && (
-                          <AnimatedCard
-                            key={m.year}
-                            milestone={m}
-                            activeTech={activeTech}
-                            setActiveTech={setActiveTech}
-                            animState={animState}
-                          />
-                        )}
-                      </AnimatePresence>
-                    </div>
-
                     <div className="hidden md:flex w-full items-start">
                       <div className={`w-1/2 ${side === 'left' ? 'flex justify-end pr-14' : 'flex justify-start pl-14'}`}>
                         {side === 'left' ? (
@@ -707,62 +720,3 @@ function DesktopBubble({ year, color, glowColor, isExpanded, isExiting }: {
   )
 }
 
-function MobileBubble({ year, color, glowColor, isExpanded, isExiting }: {
-  year: string
-  color: string
-  glowColor: string
-  isExpanded: boolean
-  isExiting: boolean
-}) {
-  const isNext = year === 'Next'
-
-  return (
-    <motion.div whileTap={{ scale: 0.95 }} className="relative cursor-pointer select-none">
-      <div className="absolute inset-0 rounded-full"
-        style={{
-          background: `radial-gradient(circle, ${glowColor}, transparent 70%)`,
-          transform: 'scale(1.3)',
-          opacity: isExpanded ? 0.55 : 0.25,
-          transition: 'opacity 0.35s ease',
-        }}
-      />
-      {isExpanded && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.25 }}
-          className="absolute inset-0 rounded-full"
-          style={{ border: `2px solid ${glowColor}`, boxShadow: `0 0 16px ${glowColor}` }}
-        />
-      )}
-      <motion.div
-        className="relative flex items-center justify-center rounded-full overflow-hidden"
-        style={{
-          width: 56,
-          height: 56,
-          background: isNext
-            ? 'linear-gradient(135deg, var(--accent), var(--accent-secondary), var(--accent-highlight))'
-            : `radial-gradient(circle at 35% 35%, ${color}22, ${color}08)`,
-          border: isNext ? '2px solid var(--border-accent)' : `2px solid color-mix(in srgb, ${color} 40%, transparent)`,
-        }}
-        animate={{
-          scale: isExpanded ? 1.08 : isExiting ? 0.92 : 1,
-          boxShadow: isExpanded ? `0 0 24px ${glowColor}` : `0 4px 16px rgba(0,0,0,0.1)`,
-          borderColor: isExpanded ? color : isNext ? 'var(--border-accent)' : `color-mix(in srgb, ${color} 40%, transparent)`,
-        }}
-        transition={{
-          type: 'spring',
-          stiffness: 350,
-          damping: 22,
-          mass: 0.8,
-        }}
-      >
-        <motion.span className="relative z-10 text-base font-extrabold tracking-tight"
-          style={{ color: isNext ? 'var(--text-primary)' : color }}
-        >
-          {year}
-        </motion.span>
-      </motion.div>
-    </motion.div>
-  )
-}

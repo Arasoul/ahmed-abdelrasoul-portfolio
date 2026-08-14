@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { projects } from '../data/projects'
 import { skillGroups } from '../data/skills'
 import { navLinks } from '../data/personal'
+import { scrollToHash } from '../utils/scroll'
 
 export interface CommandItem {
   id: string
@@ -22,7 +23,7 @@ export function useCommandPalette() {
       description: `Navigate to ${link.label}`,
       type: 'nav' as const,
       action: () => {
-        document.querySelector(link.href)?.scrollIntoView({ behavior: 'smooth' })
+        scrollToHash(link.href, 92)
         setOpen(false)
       },
     })),
@@ -32,8 +33,7 @@ export function useCommandPalette() {
       description: `${p.category} — ${p.role || 'Project'}`,
       type: 'project' as const,
       action: () => {
-        const el = document.getElementById('projects')
-        el?.scrollIntoView({ behavior: 'smooth' })
+        scrollToHash('#projects', 92)
         setTimeout(() => setOpen(false), 300)
       },
     })),
@@ -44,7 +44,7 @@ export function useCommandPalette() {
         description: `Skill in ${g.title}`,
         type: 'skill' as const,
         action: () => {
-          document.getElementById('skills')?.scrollIntoView({ behavior: 'smooth' })
+          scrollToHash('#skills', 92)
           setTimeout(() => setOpen(false), 300)
         },
       }))

@@ -391,6 +391,10 @@
   position: relative;
 }
 
+section[id] {
+  scroll-margin-top: 92px;
+}
+
 @media (min-width: 768px) {
   .section { padding: 7rem 2rem; }
 }

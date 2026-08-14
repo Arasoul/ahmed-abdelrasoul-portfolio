@@ -4,6 +4,7 @@ import { FiMenu, FiX, FiCommand } from 'react-icons/fi'
 import { navLinks } from '../../data/personal'
 import logo from '../../assets/Logo.png'
 import ThemeToggle from './ThemeToggle'
+import { scrollToHash } from '../../utils/scroll'
 
 interface Props {
   dark: boolean
@@ -32,7 +33,7 @@ export default function Navbar({ dark, toggleTheme, onOpenPalette }: Props) {
 
   const handleClick = (href: string) => {
     setOpen(false)
-    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
+    window.requestAnimationFrame(() => scrollToHash(href, 92))
   }
 
   return (
