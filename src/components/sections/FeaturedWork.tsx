@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { FiExternalLink, FiGithub, FiArrowRight, FiAward, FiBarChart2, FiAlertTriangle, FiCheckCircle, FiCpu } from 'react-icons/fi'
 import { projects, projectCategories } from '../../data/projects'
@@ -19,6 +20,7 @@ const storySections = [
 ]
 
 export default function FeaturedWork() {
+  const [expandedMobileProject, setExpandedMobileProject] = useState<string | null>(null)
   const { ref, revealed } = useScrollReveal({ threshold: 0.05 })
   const { highlight, activeTech, setActiveTech } = usePortfolio()
   return (
@@ -46,6 +48,7 @@ export default function FeaturedWork() {
           {flagship.map((project, idx) => {
             const dimmed = isDimmed(project.technologies, activeTech)
             const showTechs = project.primaryTechnologies ?? project.technologies
+            const mobileExpanded = expandedMobileProject === project.id
             return (
             <motion.div key={project.id} id={`project-${project.id}`}
               initial={{ opacity: 0, y: 30 }} animate={revealed ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5, delay: idx * 0.12 }}
@@ -85,8 +88,17 @@ export default function FeaturedWork() {
 
                   <span className="block mb-4 text-[10px] text-muted">{project.timeline} &middot; {project.role}</span>
 
+                  <button
+                    type="button"
+                    onClick={() => setExpandedMobileProject(mobileExpanded ? null : project.id)}
+                    className="mb-4 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[11px] font-semibold text-accent md:hidden"
+                    style={{ borderColor: 'var(--border-accent)' }}
+                  >
+                    {mobileExpanded ? 'Hide project story' : 'Read project story'}
+                  </button>
+
                   {/* Engineering story */}
-                  <div className="space-y-4">
+                  <div className={`space-y-4 ${mobileExpanded ? 'block' : 'hidden md:block'}`}>
                     {storySections.map((section) => {
                       const content = project[section.key]
                       if (!content) return null

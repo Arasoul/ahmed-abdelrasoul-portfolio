@@ -26,7 +26,7 @@ export default function ProjectLibrary() {
         <motion.p initial={{ opacity: 0 }} animate={revealed ? { opacity: 1 } : {}} transition={{ delay: 0.15 }}
           className="section-subtitle">Three additional projects with quick context. Expand any card for deeper details.</motion.p>
 
-        <motion.div initial={{ opacity: 0 }} animate={revealed ? { opacity: 1 } : {}} transition={{ delay: 0.2 }} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <motion.div initial={{ opacity: 0 }} animate={revealed ? { opacity: 1 } : {}} transition={{ delay: 0.2 }} className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 sm:grid sm:grid-cols-2 sm:overflow-visible lg:grid-cols-3">
           {compactProjects.map((p, i) => {
             const cardDimmed = isDimmed(p.technologies, activeTech)
             const open = expandedCard === p.id
@@ -36,7 +36,7 @@ export default function ProjectLibrary() {
                 initial={{ opacity: 0, y: 16 }}
                 animate={revealed ? { opacity: 1, y: 0 } : {}}
                 transition={{ delay: 0.2 + i * 0.07 }}
-                className={`card-glow group rounded-2xl border p-5 transition-all cross-highlight tech-relation-target ${highlight === p.id ? 'active' : ''} ${cardDimmed ? 'dimmed' : ''}`}
+                className={`card-glow group min-w-[85%] snap-center rounded-2xl border p-5 transition-all cross-highlight tech-relation-target sm:min-w-0 ${highlight === p.id ? 'active' : ''} ${cardDimmed ? 'dimmed' : ''}`}
                 style={{ backgroundColor: 'var(--bg-surface)', borderColor: highlight === p.id ? 'var(--accent)' : 'var(--border-subtle)' }}
               >
                 <div className="mb-3 flex items-start justify-between gap-3">

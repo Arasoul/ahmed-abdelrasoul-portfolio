@@ -44,7 +44,7 @@ export default function Hero({ dark }: { dark: boolean }) {
   const profileImage = dark ? withBase('/images/hero-dark.png') : withBase('/images/me-light.png')
 
   return (
-    <section id="hero" data-section="hero" className="relative flex min-h-screen items-center justify-center overflow-hidden px-4">
+    <section id="hero" data-section="hero" className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 pt-24 pb-12 md:pb-0">
       <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse 800px 500px at 30% 40%, var(--accent-primary-10), transparent 70%), radial-gradient(ellipse 600px 400px at 70% 60%, var(--accent-secondary-10), transparent 70%)' }} />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[var(--bg-page)]" />
 
@@ -55,27 +55,27 @@ export default function Hero({ dark }: { dark: boolean }) {
         className="absolute right-1/4 bottom-1/3 h-48 w-48 rounded-full"
         style={{ background: 'var(--accent-secondary)', filter: 'blur(80px)', opacity: 0.05 }} />
 
-      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center gap-12 md:flex-row md:gap-16 lg:gap-20">
+      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center gap-8 md:gap-16 lg:flex-row lg:gap-20">
         {/* Left content ~55% */}
         <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
           className="flex flex-1 flex-col items-center text-center md:items-start md:text-left"
         >
           <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-            className="mb-2 text-sm font-medium uppercase tracking-[0.18em] text-accent">AI Engineer • Data Scientist • Automation Specialist</motion.p>
-          <h1 className="mb-3 text-3xl font-extrabold tracking-wide text-primary md:text-5xl lg:text-6xl"
+            className="mb-2 text-xs font-medium uppercase tracking-[0.14em] text-accent sm:text-sm sm:tracking-[0.18em]">AI Engineer • Data Scientist • Automation Specialist</motion.p>
+          <h1 className="mb-3 text-3xl font-extrabold tracking-wide text-primary sm:text-4xl md:text-5xl lg:text-6xl"
             style={{ textShadow: '0 0 40px var(--accent-10)' }}
           >{personalInfo.name}</h1>
-          <h2 className="mb-1 text-lg font-semibold text-secondary md:text-xl"><Typewriter /></h2>
+          <h2 className="mb-1 text-base font-semibold text-secondary sm:text-lg md:text-xl"><Typewriter /></h2>
           <p className="mb-6 max-w-lg text-sm leading-relaxed text-secondary md:text-base">{personalInfo.motto}</p>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <a href={withBase('/Ahmed-CV.pdf')} download className="btn btn-primary hover-glow">
+          <div className="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
+            <a href={withBase('/Ahmed-CV.pdf')} download className="btn btn-primary hover-glow w-full justify-center sm:w-auto">
               <FiDownload size={16} /> Download Resume
             </a>
-            <a href="#work" className="btn btn-secondary">
+            <a href="#work" className="btn btn-secondary w-full justify-center sm:w-auto">
               View Work <FiArrowRight size={16} />
             </a>
-            <div className="flex items-center">
+            <div className="flex items-center justify-center sm:justify-start">
               <a href={personalInfo.linkedin} target="_blank" rel="noopener noreferrer" className="btn-icon" aria-label="LinkedIn"><FiLinkedin size={18} /></a>
               <a href={personalInfo.github} target="_blank" rel="noopener noreferrer" className="btn-icon" aria-label="GitHub"><FiGithub size={18} /></a>
               <a href={`mailto:${personalInfo.email}`} className="btn-icon" aria-label="Email"><FiMail size={18} /></a>
@@ -95,7 +95,7 @@ export default function Hero({ dark }: { dark: boolean }) {
           </div>
 
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }}
-            className="card-glass mt-8 flex items-center gap-2 rounded-full px-3 py-1.5 text-[10px] text-secondary"
+            className="card-glass mt-8 hidden items-center gap-2 rounded-full px-3 py-1.5 text-[10px] text-secondary md:flex"
           >
             <FiCommand size={10} /> <span>Press </span>
             <kbd className="rounded border px-1 font-mono text-[10px] text-secondary" style={{ borderColor: 'var(--border-accent)' }}>Ctrl</kbd>
@@ -106,8 +106,8 @@ export default function Hero({ dark }: { dark: boolean }) {
         </motion.div>
 
         {/* Right portrait ~45% */}
-        <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7, ease: 'easeOut' }}
-          className="flex-shrink-0"
+          <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7, ease: 'easeOut' }}
+            className="order-first flex-shrink-0 lg:order-none"
         >
           <div className="relative">
             {/* Layered ambient glow */}
@@ -117,7 +117,7 @@ export default function Hero({ dark }: { dark: boolean }) {
             {/* Premium frame with light sweep */}
             <div className="relative light-sweep rounded-[1.25rem]" style={{ boxShadow: '0 0 0 1px var(--border-accent), 0 20px 60px -12px rgba(0,0,0,0.3), 0 0 40px var(--accent-10)' }}>
               <div className="rounded-[1.25rem] p-[6px]" style={{ background: 'linear-gradient(135deg, var(--accent), var(--accent-secondary), var(--accent-highlight))' }}>
-                <div className="w-[280px] md:w-[360px] lg:w-[420px] aspect-[4/5] overflow-hidden rounded-[1.1rem] p-3" style={{ background: 'var(--bg-surface)' }}>
+                <div className="w-[240px] sm:w-[280px] md:w-[360px] lg:w-[420px] aspect-[4/5] overflow-hidden rounded-[1.1rem] p-3" style={{ background: 'var(--bg-surface)' }}>
                   <img src={profileImage} alt={personalInfo.name}
                     className="h-full w-full rounded-lg object-cover object-center transition-transform duration-700 hover:scale-105"
                     onError={(e) => { (e.target as HTMLImageElement).src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="420" height="525" fill="%233B82F6"><rect width="420" height="525" rx="18"/><text x="210" y="274" font-size="80" text-anchor="middle" fill="white">A</text></svg>' }}
@@ -142,7 +142,7 @@ export default function Hero({ dark }: { dark: boolean }) {
 
           {/* Quick metrics as premium stat cards */}
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}
-            className="mt-5 grid grid-cols-4 gap-2"
+            className="mt-5 grid grid-cols-2 gap-2 md:grid-cols-4"
           >
             {highlights.slice(0, 4).map((h) => (
               <div key={h.title} className="stat-card">

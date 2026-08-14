@@ -81,7 +81,7 @@ export default function EngineerProfile() {
           <motion.div initial={{ opacity: 0, x: -30 }} animate={revealed ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.6, delay: 0.1 }}
             className="md:col-span-2"
           >
-            <div className="sticky top-24 space-y-5">
+            <div className="space-y-5 md:sticky md:top-24">
               {/* 1. Portrait */}
               <div className="orbit-frame mx-auto h-56 w-56 md:mx-0 md:h-64 md:w-64">
                 <div className="h-full w-full overflow-hidden rounded-[1rem]" style={{ boxShadow: '0 0 0 1px var(--border-accent), 0 8px 32px var(--accent-10)' }}>
