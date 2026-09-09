@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { projects } from '../data/projects'
 import { skillGroups } from '../data/skills'
 import { navLinks } from '../data/personal'
@@ -15,6 +16,7 @@ export interface CommandItem {
 export function useCommandPalette() {
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
+  const navigate = useNavigate()
 
   const commands: CommandItem[] = [
     ...navLinks.map((link) => ({
@@ -33,8 +35,8 @@ export function useCommandPalette() {
       description: `${p.category} — ${p.role || 'Project'}`,
       type: 'project' as const,
       action: () => {
-        scrollToHash('#projects', 92)
-        setTimeout(() => setOpen(false), 300)
+        setOpen(false)
+        navigate(`/projects/${p.id}`)
       },
     })),
     ...skillGroups.flatMap((g) =>
@@ -44,7 +46,7 @@ export function useCommandPalette() {
         description: `Skill in ${g.title}`,
         type: 'skill' as const,
         action: () => {
-          scrollToHash('#skills', 92)
+          scrollToHash('#engineering', 92)
           setTimeout(() => setOpen(false), 300)
         },
       }))

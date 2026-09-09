@@ -1,45 +1,45 @@
-import type { PersonalInfo, NavLink, Highlight } from '../types'
+import type { PersonalInfo, NavLink } from '../types'
+import { withBase } from '../utils/assetPath'
+import { chapters } from './chapters'
 
 export const personalInfo: PersonalInfo = {
   name: 'Ahmed Abdelrasoul',
-  title: 'AI Engineer • Data Scientist • Automation Specialist',
+  title: 'AI & Data Engineer',
   titles: [
-    'AI Engineer',
-    'Data Scientist',
+    'AI & Data Engineer',
+    'Intelligent Systems Engineer',
     'AI Automation Engineer',
-    'Machine Learning Engineer',
-    'Automation Specialist',
-    'Research + Product Builder',
+    'Data Intelligence Engineer',
+    'Product Engineer',
   ],
   motto:
-    'I build AI systems, automate decision-heavy workflows, and turn complex data into products, processes, and business outcomes.',
+    'Building intelligent systems from raw data to decisions.',
   email: 'ahmedmrasoul@gmail.com',
   location: 'Cairo, Egypt',
   linkedin: 'https://www.linkedin.com/in/ahmed-abdelrasoul-ai/',
   github: 'https://github.com/Arasoul',
   website: 'https://arasoul.dev',
+  resumeUrl: withBase('/Ahmed-CV.pdf'),
   summary:
-    'AI engineer and data scientist focused on building complete systems from data to deployment. I design pipelines, analyze complex datasets, train and ship ML models, and build workflow automations that turn ideas into operational value. My work spans computer vision, NLP, analytics, AI automation, and software engineering — with a growing focus on agentic AI and scalable intelligent workflows.',
+    'AI, data and automation systems engineered for real use — complete, validated, product-ready.',
   careerObjective:
-    'To build intelligent systems that solve real problems — combining AI, software engineering, and thoughtful design into products that work outside the lab.',
+    'To build intelligent decision systems that work outside the lab — combining AI, data engineering, and product thinking into systems that deliver measurable value.',
   philosophy:
-    'Clean architecture makes intelligent systems maintainable. A model is only as good as the pipeline that feeds it, the API that serves it, and the tests that validate it.',
+    'A model is only as good as the pipeline that feeds it, the validation that proves it, and the product that puts it to work. Clean engineering turns intelligence into outcomes.',
   currentInterests: [
     'AI & ML Systems',
-    'Data Science & Analytics',
+    'Data Intelligence',
     'AI Automation',
     'AI Agents',
-    'Agentic Workflows',
+    'Anchoring & Workflow Engineering',
     'Computer Vision',
-    'Natural Language Processing',
-    'MLOps',
+    'Analytics',
   ],
   futureInterests: [
-    'Agentic AI',
     'AI Productization',
     'Automation Systems',
-    'Game AI',
-    'Interactive Systems',
+    'Intelligent Decision Systems',
+    'AI Agents at Scale',
   ],
   education: [
     {
@@ -49,60 +49,39 @@ export const personalInfo: PersonalInfo = {
     },
   ],
   availability: [
-    'Full-time AI/ML Engineering',
-    'Data Science',
-    'Software Engineering',
-    'Open Source',
-    'Research Collaboration',
+    'AI Engineering',
+    'Data Engineering',
+    'Intelligent Systems',
+    'AI Automation',
+    'Analytics',
   ],
   researchInterests: [
-    { area: 'Computer Vision', description: 'Object detection, segmentation, face recognition — building vision systems that work on real-world data' },
-    { area: 'AI Automation', description: 'n8n workflows, intelligent agents, and automation systems that reduce manual work and connect tools across teams' },
-    { area: 'Game AI', description: 'Behavior trees, pathfinding, decision-making systems for interactive experiences' },
-    { area: 'Generative AI', description: 'Procedural content generation, creative AI tools, synthetic data for training' },
-    { area: 'Interactive Systems', description: 'Real-time applications where AI and user input shape the experience together' },
+    { area: 'Data Intelligence', description: 'Turning raw data into decision-ready systems — semantic understanding, measures, and adaptive reporting' },
+    { area: 'AI Automation', description: 'n8n workflows, intelligent agents, and automation systems that connect tools and reduce manual work' },
+    { area: 'Computer Vision', description: 'Multi-stage vision systems for real-world data — detection, segmentation, classification, and interpretation' },
+    { area: 'Decision Systems', description: 'Optimization and predictive intelligence that guide consequential business decisions' },
+    { area: 'AI Productization', description: 'Turning validated engineering into usable, polished products people can actually adopt' },
   ],
   learningRoadmap: [
     { topic: 'FOUNDATION', status: 'completed', description: '' },
-    { topic: 'Machine Learning', status: 'completed', description: 'Supervised, unsupervised, reinforcement learning' },
-    { topic: 'Deep Learning', status: 'completed', description: 'CNNs, RNNs, Transformers — implemented from scratch and with frameworks' },
-    { topic: 'Computer Vision', status: 'completed', description: 'Object detection, segmentation, face recognition, image processing' },
-    { topic: 'Natural Language Processing', status: 'completed', description: 'Text classification, NER, sentiment analysis, LLM fine-tuning' },
+    { topic: 'Machine Learning', status: 'completed', description: 'Supervised, unsupervised, and deep learning' },
+    { topic: 'Computer Vision', status: 'completed', description: 'Detection, segmentation, classification, and image processing' },
+    { topic: 'Data Science', status: 'completed', description: 'EDA, statistics, visualization, and business intelligence' },
     { topic: 'ENGINEERING', status: 'completed', description: '' },
-    { topic: 'Software Engineering', status: 'completed', description: 'OOP, design patterns, testing, maintainable architecture' },
-    { topic: 'Python Packaging', status: 'completed', description: 'Package development, PyPI publishing, documentation' },
-    { topic: 'MLOps', status: 'completed', description: 'Docker, Kubernetes, CI/CD, model serving, API design' },
+    { topic: 'Software Engineering', status: 'completed', description: 'OOP, design patterns, testing, and maintainable architecture' },
+    { topic: 'System Building', status: 'completed', description: 'From individual projects to complete, validated engineering systems' },
+    { topic: 'Validation', status: 'completed', description: 'Automated tests, statistical validation, and measurable baselines' },
     { topic: 'CURRENT FOCUS', status: 'learning', description: '' },
-    { topic: 'AI Fundamentals & Generative AI', status: 'learning', description: 'Core GenAI concepts, foundations, and modern AI mental models' },
-    { topic: 'ML Literacy for Non-Engineers', status: 'learning', description: 'Practical understanding of ML value, limitations, and problem framing' },
-    { topic: 'Advanced Prompting', status: 'learning', description: 'Prompt design for structured, reliable, and high-context AI interactions' },
-    { topic: 'AI Agents: Concepts to First Prototype', status: 'learning', description: 'Agent patterns, orchestration, memory, and first working prototypes' },
-    { topic: 'Automation Foundations with n8n', status: 'learning', description: 'Workflow automation, API orchestration, and no-code/low-code automation flows' },
-    { topic: 'Advanced AI Automation with n8n', status: 'learning', description: 'Connecting LLMs, tools, services, and business processes into real workflows' },
-    { topic: 'Agents at Scale', status: 'learning', description: 'Slack, email, web, and multi-step workflows for production use' },
-    { topic: 'Production, Security, Governance & Ethics', status: 'learning', description: 'Responsible deployment, controls, governance, and operational safety' },
-    { topic: 'Applied Reference Workflows & Selling AI Internally', status: 'learning', description: 'Turning AI ideas into usable business workflows and internal adoption' },
+    { topic: 'AI Automation with n8n', status: 'learning', description: 'Workflow automation, AI agents, API orchestration, and AI-powered workflows' },
+    { topic: 'AI Agents', status: 'learning', description: 'Agent patterns, orchestration, memory, and real multi-step workflows' },
+    { topic: 'Productization', status: 'learning', description: 'Turning completed engineering systems into polished, usable products' },
     { topic: 'NEXT', status: 'planned', description: '' },
-    { topic: 'Unity', status: 'planned', description: 'C# scripting, scene management, physics, UI systems' },
-    { topic: 'Game AI', status: 'planned', description: 'Behavior trees, pathfinding, decision-making systems' },
+    { topic: 'Production AI', status: 'planned', description: 'Operational safety, governance, and responsible deployment' },
     { topic: 'Generative AI Products', status: 'planned', description: 'Applying generative models to practical workflows and internal tools' },
   ],
 }
 
-export const navLinks: NavLink[] = [
-  { label: 'Home', href: '#hero' },
-  { label: 'About', href: '#profile' },
-  { label: 'Capabilities', href: '#skills' },
-  { label: 'Work', href: '#work' },
-  { label: 'Journey', href: '#journey' },
-  { label: 'Certifications', href: '#certifications' },
-  { label: 'Contact', href: '#contact' },
-]
-
-export const highlights: Highlight[] = [
-  { title: 'Computer Science', value: 'B.Sc.', icon: '🎓', description: 'Graduate' },
-  { title: 'Professional Projects', value: '11+', icon: '💻', description: 'Across AI, Data, & SWE' },
-  { title: 'Certifications', value: '10+', icon: '📜', description: 'Professional Credentials' },
-  { title: 'Open Source', value: '16+', icon: '📦', description: 'Public Repositories' },
-  { title: 'Co-Founder', value: 'VoidSpark', icon: '🚀', description: 'Game Studio' },
-]
+export const navLinks: NavLink[] = chapters.map((ch) => ({
+  label: ch.shortLabel,
+  href: ch.hash,
+}))

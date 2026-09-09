@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FiMenu, FiX, FiCommand } from 'react-icons/fi'
 import { navLinks } from '../../data/personal'
@@ -12,14 +12,21 @@ interface Props {
   onOpenPalette: () => void
 }
 
+const SECTION_COUNT = navLinks.length
+
 export default function Navbar({ dark, toggleTheme, onOpenPalette }: Props) {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [activeSection, setActiveSection] = useState('')
+  const [progress, setProgress] = useState(0)
 
   useEffect(() => {
     const handler = () => {
-      setScrolled(window.scrollY > 50)
+      const win = window
+      const doc = document.documentElement
+      setScrolled(win.scrollY > 50)
+      const max = doc.scrollHeight - win.innerHeight
+      setProgress(max > 0 ? Math.min(1, win.scrollY / max) : 0)
       const ids = navLinks.map(l => l.href.slice(1))
       for (const id of ids.reverse()) {
         const el = document.getElementById(id)
@@ -27,34 +34,52 @@ export default function Navbar({ dark, toggleTheme, onOpenPalette }: Props) {
       }
       setActiveSection('')
     }
+    handler()
     window.addEventListener('scroll', handler, { passive: true })
-    return () => window.removeEventListener('scroll', handler)
+    window.addEventListener('resize', handler)
+    return () => {
+      window.removeEventListener('scroll', handler)
+      window.removeEventListener('resize', handler)
+    }
   }, [])
 
-  const handleClick = (href: string) => {
+  const handleClick = useCallback((href: string) => {
     setOpen(false)
     window.requestAnimationFrame(() => scrollToHash(href, 92))
-  }
+  }, [])
+
+  const activeIndex = navLinks.findIndex((l) => l.href.slice(1) === activeSection)
+  const sectionCounter = `${String(activeIndex + 1).padStart(2, '0')} / ${String(SECTION_COUNT).padStart(2, '0')}`
 
   return (
     <motion.header initial={{ y: -80 }} animate={{ y: 0 }} transition={{ duration: 0.5, ease: 'easeOut' }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'border-b shadow-sm backdrop-blur-2xl' : 'bg-transparent'}`}
       style={{ backgroundColor: scrolled ? 'var(--bg-glass-strong)' : 'transparent', borderColor: scrolled ? 'var(--border-subtle)' : 'transparent' }}
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 md:px-8">
-        <button onClick={() => handleClick('#hero')} className="flex items-center gap-2 text-xl font-bold tracking-tight gradient-text">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-8">
+        <button onClick={() => handleClick('#origin')} className="flex items-center gap-2.5 group">
             <img src={logo} alt="Arasoul" className="h-8 w-8 md:h-9 md:w-9 flex-shrink-0" />
-            Arasoul
+            <div className="hidden sm:flex flex-col items-start">
+              <span className="text-sm font-bold tracking-tight text-primary font-display">AHMED</span>
+              <span className="font-mono text-[8px] uppercase tracking-widest text-muted">AI & DATA</span>
+            </div>
           </button>
 
-        <nav className="hidden items-center gap-1 md:flex">
+        <span className="nav-counter hidden items-center gap-1.5 font-mono text-[10px] tracking-tight text-muted sm:flex">
+          <span className="font-semibold text-accent">AHMED</span>
+          <span>{sectionCounter}</span>
+        </span>
+
+        <nav className="hidden items-center gap-1 lg:flex">
           {navLinks.map((link) => {
             const isActive = activeSection === link.href.slice(1)
+            const idx = navLinks.indexOf(link)
             return (
               <button key={link.href} onClick={() => handleClick(link.href)}
-                className={`nav-link relative px-3 py-1.5 text-sm font-medium transition-all duration-200 rounded-lg ${isActive ? 'text-accent' : ''}`}
+                className={`nav-link relative px-2.5 py-1.5 text-[13px] font-medium transition-all duration-200 rounded-lg ${isActive ? 'text-accent' : ''}`}
                 style={{ backgroundColor: isActive ? 'var(--accent-primary-10)' : 'transparent' }}
               >
+                <span className="font-mono text-[9px] text-muted mr-1">{String(idx + 1).padStart(2, '0')}</span>
                 {link.label}
                 {isActive && (
                   <motion.div layoutId="nav-indicator"
@@ -77,14 +102,15 @@ export default function Navbar({ dark, toggleTheme, onOpenPalette }: Props) {
           </div>
         </nav>
 
-        <div className="flex items-center gap-2 md:hidden">
+        <div className="flex items-center gap-2 lg:hidden">
+          <span className="font-mono text-[10px] text-muted">AHMED / {sectionCounter}</span>
           <button onClick={onOpenPalette}
-            className="flex h-9 w-9 items-center justify-center rounded-full border"
+            className="flex h-10 w-10 items-center justify-center rounded-full border"
             style={{ borderColor: 'var(--border-subtle)', color: 'var(--text-secondary)' }}>
             <FiCommand size={14} />
           </button>
           <ThemeToggle dark={dark} toggle={toggleTheme} />
-          <button onClick={() => setOpen(!open)} className="flex h-9 w-9 items-center justify-center rounded-full"
+          <button onClick={() => setOpen(!open)} className="flex h-10 w-10 items-center justify-center rounded-full"
             style={{ color: 'var(--text-primary)' }} aria-label="Toggle menu">
             {open ? <FiX size={18} /> : <FiMenu size={18} />}
           </button>
@@ -97,14 +123,21 @@ export default function Navbar({ dark, toggleTheme, onOpenPalette }: Props) {
             className="overflow-hidden border-t" style={{ borderColor: 'var(--border-subtle)', backgroundColor: 'var(--bg-glass-strong)' }}
           >
             <div className="flex flex-col gap-1 px-4 py-3">
-              {navLinks.map((link) => (
+              {navLinks.map((link, i) => (
                 <button key={link.href} onClick={() => handleClick(link.href)}
-                  className="nav-link rounded-lg px-3 py-2 text-left text-sm font-medium">{link.label}</button>
+                  className="nav-link flex items-center justify-between rounded-lg px-3 py-2 text-left text-sm font-medium">
+                  <span>{link.label}</span>
+                  <span className="font-mono text-[10px] text-muted">{String(i + 1).padStart(2, '0')}</span>
+                </button>
               ))}
             </div>
           </motion.nav>
         )}
       </AnimatePresence>
+
+      <div className="nav-progress" aria-hidden="true">
+        <div className="nav-progress-fill" style={{ transform: `scaleX(${progress})` }} />
+      </div>
     </motion.header>
   )
 }

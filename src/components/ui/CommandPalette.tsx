@@ -37,6 +37,7 @@ export default function CommandPalette() {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search sections, projects, skills..."
+                aria-label="Search commands"
                 className="input border-0 bg-transparent p-0 focus:shadow-none focus:ring-0"
                 autoFocus
               />

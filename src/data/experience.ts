@@ -2,6 +2,53 @@ import type { Experience } from '../types'
 
 export const experiences: Experience[] = [
   {
+    id: 'depi',
+    company: 'Digital Egypt Pioneers Initiative (DEPI)',
+    role: 'AI Automation Trainee',
+    type: 'internship',
+    period: 'Aug 2026 — Present',
+    current: true,
+    location: 'Cairo, Egypt · Remote',
+    overview:
+      'Training and building practical solutions in AI-powered workflow automation — connecting intelligent AI capabilities with real workflows, APIs, and external applications.',
+    focus: [
+      { title: 'AI-Powered Workflows', description: 'Designing automated workflows using n8n.' },
+      { title: 'AI & API Integration', description: 'Connecting AI services, APIs, and external applications into automated systems.' },
+      { title: 'Intelligent Automation', description: 'Exploring practical applications of AI agents and intelligent workflow design.' },
+      { title: 'Prompt Engineering', description: 'Applying prompt engineering approaches within AI-driven automation workflows.' },
+    ],
+    responsibilities: [
+      'Designed AI-powered workflow automations in n8n connecting LLMs, tools, and services',
+      'Built AI agents that orchestrate multi-step business processes',
+      'Engineered API integrations and prompt patterns for reliable automation',
+      'Applied workflow engineering to reduce manual effort and increase consistency',
+    ],
+    achievements: [
+      'Completed AI Automation and AI agents training within the national skills initiative',
+      'Built reusable automation workflows validated across real business processes',
+    ],
+    technologies: ['n8n', 'AI Agents', 'APIs', 'Prompt Engineering', 'Workflow Automation'],
+    skills: ['AI Automation', 'n8n', 'AI Agents', 'API Integration', 'Prompt Engineering', 'Workflow Engineering'],
+  },
+  {
+    id: 'ecu',
+    company: 'Egyptian Chinese University',
+    role: 'Teaching Assistant',
+    type: 'full-time',
+    period: 'Aug 2026 — Present',
+    current: true,
+    location: 'Nasr City, Egypt · On-site',
+    overview:
+      'Supporting students in developing their technical understanding through practical guidance, explanation, and hands-on learning.',
+    focus: [
+      { title: 'Technical Communication', description: 'Breaking down technical concepts into clear, understandable explanations.' },
+      { title: 'Practical Guidance', description: 'Supporting hands-on learning and technical problem-solving.' },
+      { title: 'Knowledge Sharing', description: 'Helping students connect theoretical concepts with practical application.' },
+      { title: 'Academic Support', description: 'Contributing to an active technical learning environment.' },
+    ],
+    skills: ['Technical Communication', 'Practical Guidance', 'Knowledge Sharing', 'Academic Support'],
+  },
+  {
     id: 'amit',
     company: 'AMIT Learning',
     role: 'AI & Machine Learning Intern',

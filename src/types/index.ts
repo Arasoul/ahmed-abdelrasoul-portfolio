@@ -20,6 +20,8 @@ export interface Project {
   docs?: string
   github?: string
   live?: string
+  productUrl?: string
+  ctaLabel?: string
   timeline?: string
   role?: string
   skills?: string[]
@@ -27,6 +29,11 @@ export interface Project {
   relatedProjects?: string[]
   difficulty?: 'beginner' | 'intermediate' | 'advanced' | 'expert'
   projectType?: 'library' | 'application' | 'research' | 'tool' | 'game' | 'api'
+  ecosystem?: 'core' | 'tool' | 'flagship' | null
+  ecosystemOrder?: number
+  metric?: string
+  limitations?: string[]
+  caseWhy?: string
 }
 
 export interface JourneyMilestone {
@@ -40,6 +47,11 @@ export interface JourneyMilestone {
   type?: 'education' | 'work' | 'achievement' | 'future'
 }
 
+export interface ExperienceFocus {
+  title: string
+  description: string
+}
+
 export interface Experience {
   id: string
   company: string
@@ -47,7 +59,9 @@ export interface Experience {
   type: 'full-time' | 'internship' | 'co-founder'
   period: string
   current?: boolean
+  location?: string
   overview?: string
+  focus?: ExperienceFocus[]
   responsibilities?: string[]
   achievements?: string[]
   highlights?: string[]
@@ -84,13 +98,6 @@ export interface Certification {
   link?: string
   image?: string
   gallery?: string[]
-}
-
-export interface Highlight {
-  title: string
-  value: string
-  icon: string
-  description: string
 }
 
 export interface ResearchInterest {

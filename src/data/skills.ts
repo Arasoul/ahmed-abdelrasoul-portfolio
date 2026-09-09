@@ -1,103 +1,57 @@
 import type { SkillGroup } from '../types'
 
-export const skillGroups: SkillGroup[] = [
+export const capabilityGroups: SkillGroup[] = [
   {
-    title: 'Programming Languages',
+    title: 'AI & Machine Learning',
     skills: [
       { name: 'Python' },
-      { name: 'C#' },
-      { name: 'C++' },
-      { name: 'SQL' },
-      { name: 'JavaScript' },
-      { name: 'PHP' },
-      { name: 'HTML' },
-      { name: 'CSS' },
-    ],
-  },
-  {
-    title: 'Artificial Intelligence',
-    skills: [
-      { name: 'Machine Learning' },
-      { name: 'Deep Learning' },
-      { name: 'Computer Vision' },
-      { name: 'Natural Language Processing' },
-      { name: 'Transformers' },
-      { name: 'LLMs' },
-    ],
-  },
-  {
-    title: 'Data Science',
-    skills: [
-      { name: 'EDA' },
-      { name: 'Statistics' },
-      { name: 'Feature Engineering' },
-      { name: 'Data Cleaning' },
-      { name: 'Data Visualization' },
-      { name: 'Business Intelligence' },
-    ],
-  },
-  {
-    title: 'Software Engineering',
-    skills: [
-      { name: 'OOP' },
-      { name: 'SOLID' },
-      { name: 'Git' },
-      { name: 'Testing' },
-      { name: 'Python Packaging' },
-      { name: 'Automation' },
-      { name: 'Design Patterns' },
-    ],
-  },
-  {
-    title: 'Frameworks & Libraries',
-    skills: [
       { name: 'PyTorch' },
       { name: 'TensorFlow' },
-      { name: 'OpenCV' },
+      { name: 'scikit-learn' },
+      { name: 'Deep Learning' },
+      { name: 'Machine Learning' },
+      { name: 'Computer Vision' },
+      { name: 'NLP' },
+    ],
+  },
+  {
+    title: 'Data & Analytics',
+    skills: [
       { name: 'Pandas' },
       { name: 'NumPy' },
-      { name: 'Scikit-learn' },
-      { name: 'spaCy' },
-      { name: 'NLTK' },
-    ],
-  },
-  {
-    title: 'Visualization',
-    skills: [
+      { name: 'SQL' },
       { name: 'Power BI' },
-      { name: 'Matplotlib' },
-      { name: 'Plotly' },
       { name: 'Excel' },
+      { name: 'EDA' },
+      { name: 'Statistical Analysis' },
+      { name: 'Data Visualization' },
     ],
   },
   {
-    title: 'Development Tools',
+    title: 'Intelligent Systems',
     skills: [
-      { name: 'VS Code' },
-      { name: 'Visual Studio' },
-      { name: 'Jupyter' },
+      { name: 'AI Agents' },
+      { name: 'RAG' },
+      { name: 'Prompt Engineering' },
+      { name: 'LLM Workflows' },
+      { name: 'Semantic Data Understanding' },
+      { name: 'Decision Systems' },
+    ],
+  },
+  {
+    title: 'Automation & Engineering',
+    skills: [
+      { name: 'n8n' },
+      { name: 'APIs' },
+      { name: 'Workflow Automation' },
+      { name: 'Docker' },
+      { name: 'Streamlit' },
+      { name: 'Git' },
       { name: 'GitHub' },
-      { name: 'Unity' },
-    ],
-  },
-  {
-    title: 'Databases',
-    skills: [{ name: 'MySQL' }],
-  },
-  {
-    title: 'Workflow',
-    skills: [
-      { name: 'Agile' },
-      { name: 'Scrum' },
-      { name: 'Project Management' },
-    ],
-  },
-  {
-    title: 'Currently Learning',
-    skills: [
-      { name: 'Unity' },
-      { name: 'Game Development' },
-      { name: 'Interactive Systems' },
+      { name: 'Testing' },
+      { name: 'Validation' },
     ],
   },
 ]
+
+export const skillGroups = capabilityGroups

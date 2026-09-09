@@ -1,57 +1,50 @@
-import { useTheme } from './hooks/useTheme'
-import { useCommandPalette } from './hooks/useCommandPalette'
-import { PortfolioProvider } from './context/PortfolioContext'
-import Navbar from './components/ui/Navbar'
-import CommandPalette from './components/ui/CommandPalette'
+import { lazy, Suspense, useEffect } from 'react'
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { PortfolioProvider } from './context/PortfolioProvider'
 import NeuralCircuitBackground from './components/ui/NeuralCircuitBackground'
-import SectionDivider from './components/ui/SectionDivider'
-import Hero from './components/sections/Hero'
-import EngineerProfile from './components/sections/EngineerProfile'
-import ProfessionalJourney from './components/sections/ProfessionalJourney'
-import Skills from './components/sections/Skills'
-import FeaturedWork from './components/sections/FeaturedWork'
-import ProjectLibrary from './components/sections/ProjectLibrary'
-import CertificationsLearning from './components/sections/CertificationsLearning'
-import ResearchFuture from './components/sections/ResearchFuture'
-import LookingAhead from './components/sections/LookingAhead'
-import Contact from './components/sections/Contact'
-import Footer from './components/sections/Footer'
+import HomePage from './pages/HomePage'
+import { scrollToHash } from './utils/scroll'
+
+const ProjectCaseStudyPage = lazy(() => import('./pages/ProjectCaseStudyPage'))
+
+const basename = import.meta.env.BASE_URL.replace(/\/$/, '')
+
+function ScrollToTop() {
+  const { pathname, hash } = useLocation()
+  useEffect(() => {
+    if (!hash) {
+      window.scrollTo(0, 0)
+      return
+    }
+    const id = hash.slice(1)
+    window.requestAnimationFrame(() => {
+      const el = document.getElementById(id)
+      if (el) scrollToHash(hash, 92)
+    })
+  }, [pathname, hash])
+  return null
+}
 
 export default function App() {
-  const { dark, toggle } = useTheme()
-  const palette = useCommandPalette()
-
   return (
     <PortfolioProvider>
-      <div className={dark ? 'dark' : ''}>
-        <div className="relative min-h-screen transition-colors duration-300"
-          style={{ backgroundColor: 'var(--bg-page)', color: 'var(--text-primary)' }}
-        >
-          <NeuralCircuitBackground />
-          <div className="relative z-10">
-            <Navbar dark={dark} toggleTheme={toggle} onOpenPalette={() => palette.setOpen(true)} />
-            <CommandPalette />
-            <Hero dark={dark} />
-            <SectionDivider variant="neural" />
-            <EngineerProfile />
-            <SectionDivider variant="gradient" />
-            <Skills />
-            <SectionDivider variant="gradient" />
-            <FeaturedWork />
-            <SectionDivider variant="circuit" />
-            <ProfessionalJourney />
-            <SectionDivider variant="neural" />
-            <CertificationsLearning />
-            <SectionDivider variant="circuit" />
-            <ProjectLibrary />
-            <SectionDivider variant="neural" />
-            <ResearchFuture />
-            <SectionDivider variant="gradient" />
-            <LookingAhead />
-            <SectionDivider variant="gradient" />
-            <Contact />
-            <Footer />
-          </div>
+      <div className="relative min-h-screen transition-colors duration-300"
+        style={{ backgroundColor: 'var(--bg-page)', color: 'var(--text-primary)' }}
+      >
+        <NeuralCircuitBackground />
+        <div className="relative z-10">
+          <BrowserRouter basename={basename}>
+            <ScrollToTop />
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/projects/:id" element={
+                <Suspense fallback={<div className="min-h-screen" />}>
+                  <ProjectCaseStudyPage />
+                </Suspense>
+              } />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </BrowserRouter>
         </div>
       </div>
     </PortfolioProvider>
