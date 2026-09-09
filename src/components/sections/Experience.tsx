@@ -1,14 +1,15 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { CSSProperties } from 'react'
 import {
   FiCalendar, FiMapPin, FiBriefcase, FiCpu, FiUsers, FiGitBranch, FiLink,
   FiTerminal, FiMessageCircle, FiTool, FiShare2, FiChevronDown, FiAward,
+  FiMaximize2, FiChevronLeft, FiChevronRight, FiX,
 } from 'react-icons/fi'
 import { experiences } from '../../data/experience'
 import { certifications } from '../../data/certifications'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
-import type { Experience as ExperienceEntry } from '../../types'
+import type { Experience as ExperienceEntry, Certification } from '../../types'
 
 const typeLabel: Record<ExperienceEntry['type'], string> = {
   'full-time': 'Full-time',
@@ -41,61 +42,195 @@ const focusLabelOf = (id: string) => (id === 'ecu' ? 'Key Strengths' : 'Key Focu
 
 function CredentialsModule({ revealed }: { revealed: boolean }) {
   const [open, setOpen] = useState(false)
+  const [viewer, setViewer] = useState<Certification | null>(null)
+  const [page, setPage] = useState(0)
+
+  const galleryImages = viewer?.gallery?.length
+    ? viewer.gallery
+    : viewer?.image
+      ? [viewer.image]
+      : []
+
+  useEffect(() => {
+    if (!viewer) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setViewer(null)
+        return
+      }
+      if (galleryImages.length > 1) {
+        if (e.key === 'ArrowRight') setPage((p) => (p + 1) % galleryImages.length)
+        if (e.key === 'ArrowLeft') setPage((p) => (p - 1 + galleryImages.length) % galleryImages.length)
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      document.body.style.overflow = prevOverflow
+    }
+  }, [viewer, galleryImages.length])
+
+  const openViewer = (cert: Certification) => {
+    setPage(0)
+    setViewer(cert)
+  }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={revealed ? { opacity: 1, y: 0 } : {}}
-      transition={{ delay: 0.5 }}
-      className="credentials-compact"
-    >
-      <button
-        onClick={() => setOpen(!open)}
-        className="credentials-toggle"
+    <>
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={revealed ? { opacity: 1, y: 0 } : {}}
+        transition={{ delay: 0.5 }}
+        className="credentials-compact"
       >
-        <div className="flex items-center gap-2">
-          <FiAward size={13} className="text-accent" />
-          <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-primary">
-            {certifications.length} Certifications & Training
-          </span>
-        </div>
-        <motion.span
-          animate={{ rotate: open ? 180 : 0 }}
-          transition={{ duration: 0.2 }}
+        <button
+          onClick={() => setOpen(!open)}
+          className="credentials-toggle"
         >
-          <FiChevronDown size={14} className="text-muted" />
-        </motion.span>
-      </button>
+          <div className="flex items-center gap-2">
+            <FiAward size={13} className="text-accent" />
+            <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-primary">
+              {certifications.length} Certifications & Training
+            </span>
+          </div>
+          <motion.span
+            animate={{ rotate: open ? 180 : 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <FiChevronDown size={14} className="text-muted" />
+          </motion.span>
+        </button>
+
+        <AnimatePresence>
+          {open && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              className="credentials-list"
+            >
+              {certifications.map((cert, i) => (
+                <motion.div
+                  key={cert.id}
+                  initial={{ opacity: 0, x: -8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.03 }}
+                >
+                  <button
+                    type="button"
+                    onClick={() => openViewer(cert)}
+                    className="credential-item"
+                    aria-label={`View certificate: ${cert.title}`}
+                    disabled={!cert.image}
+                  >
+                    <span className="credential-thumb">
+                      {cert.thumb && (
+                        <img
+                          src={cert.thumb}
+                          alt=""
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      )}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <div className="text-[10px] font-semibold text-primary truncate">{cert.title}</div>
+                      <div className="text-[9px] text-muted">{cert.issuer}</div>
+                    </div>
+                    <span className="text-[9px] text-muted whitespace-nowrap">{cert.date}</span>
+                    <span className="credential-view">
+                      <FiMaximize2 size={11} />
+                    </span>
+                  </button>
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
 
       <AnimatePresence>
-        {open && (
+        {viewer && (
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-            className="credentials-list"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="cert-lightbox"
+            role="dialog"
+            aria-modal="true"
+            aria-label={`${viewer.title} certificate`}
+            onClick={() => setViewer(null)}
           >
-            {certifications.map((cert, i) => (
-              <motion.div
-                key={cert.id}
-                initial={{ opacity: 0, x: -8 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.03 }}
-                className="credential-item"
-              >
-                <span className="credential-dot" />
-                <div className="min-w-0 flex-1">
-                  <div className="text-[10px] font-semibold text-primary truncate">{cert.title}</div>
-                  <div className="text-[9px] text-muted">{cert.issuer}</div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96, y: 12 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96, y: 12 }}
+              transition={{ duration: 0.18, ease: 'easeOut' }}
+              className="cert-lightbox-card"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <header className="cert-lightbox-header">
+                <div className="min-w-0">
+                  <h3 className="cert-lightbox-title truncate">{viewer.title}</h3>
+                  <p className="cert-lightbox-sub truncate">
+                    {viewer.issuer} · {viewer.date}
+                  </p>
                 </div>
-                <span className="text-[9px] text-muted whitespace-nowrap">{cert.date}</span>
-              </motion.div>
-            ))}
+                <button
+                  type="button"
+                  className="cert-lightbox-close"
+                  onClick={() => setViewer(null)}
+                  aria-label="Close certificate"
+                >
+                  <FiX size={16} />
+                </button>
+              </header>
+
+              <div className="cert-lightbox-stage">
+                {galleryImages.length > 1 && (
+                  <>
+                    <button
+                      type="button"
+                      className="cert-lightbox-nav cert-lightbox-nav--prev"
+                      onClick={() => setPage((p) => (p - 1 + galleryImages.length) % galleryImages.length)}
+                      aria-label="Previous page"
+                    >
+                      <FiChevronLeft size={16} />
+                    </button>
+                    <button
+                      type="button"
+                      className="cert-lightbox-nav cert-lightbox-nav--next"
+                      onClick={() => setPage((p) => (p + 1) % galleryImages.length)}
+                      aria-label="Next page"
+                    >
+                      <FiChevronRight size={16} />
+                    </button>
+                  </>
+                )}
+                <img
+                  key={galleryImages[Math.min(page, galleryImages.length - 1)] ?? viewer.image}
+                  src={galleryImages[Math.min(page, galleryImages.length - 1)] ?? viewer.image}
+                  alt={`${viewer.title} certificate`}
+                  className="cert-lightbox-img"
+                />
+              </div>
+
+              <footer className="cert-lightbox-footer">
+                <span>{viewer.credentialId ? `ID: ${viewer.credentialId}` : viewer.description.slice(0, 72)}</span>
+                {galleryImages.length > 1 && (
+                  <span className="whitespace-nowrap">
+                    {Math.min(page, galleryImages.length - 1) + 1} / {galleryImages.length}
+                  </span>
+                )}
+              </footer>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.div>
+    </>
   )
 }
 

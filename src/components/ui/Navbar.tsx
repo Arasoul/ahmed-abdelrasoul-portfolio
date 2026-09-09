@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FiMenu, FiX, FiCommand } from 'react-icons/fi'
 import { navLinks } from '../../data/personal'
@@ -18,28 +18,44 @@ export default function Navbar({ dark, toggleTheme, onOpenPalette }: Props) {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [activeSection, setActiveSection] = useState('')
-  const [progress, setProgress] = useState(0)
+  const fillRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
-    const handler = () => {
-      const win = window
-      const doc = document.documentElement
-      setScrolled(win.scrollY > 50)
-      const max = doc.scrollHeight - win.innerHeight
-      setProgress(max > 0 ? Math.min(1, win.scrollY / max) : 0)
-      const ids = navLinks.map(l => l.href.slice(1))
-      for (const id of ids.reverse()) {
-        const el = document.getElementById(id)
-        if (el && el.getBoundingClientRect().top <= 200) { setActiveSection(id); return }
-      }
-      setActiveSection('')
+    let raf = 0
+    const onScroll = () => {
+      if (raf) return
+      raf = window.requestAnimationFrame(() => {
+        raf = 0
+        const doc = document.documentElement
+        const max = doc.scrollHeight - window.innerHeight
+        const p = max > 0 ? Math.min(1, window.scrollY / max) : 0
+        if (fillRef.current) fillRef.current.style.transform = `scaleX(${p})`
+        setScrolled(window.scrollY > 50)
+      })
     }
-    handler()
-    window.addEventListener('scroll', handler, { passive: true })
-    window.addEventListener('resize', handler)
+
+    const sectionIds = navLinks.map((l) => l.href.slice(1))
+    const spy = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) setActiveSection(entry.target.id)
+        }
+      },
+      { rootMargin: '-40% 0px -55% 0px', threshold: 0 },
+    )
+    for (const id of sectionIds) {
+      const el = document.getElementById(id)
+      if (el) spy.observe(el)
+    }
+
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
     return () => {
-      window.removeEventListener('scroll', handler)
-      window.removeEventListener('resize', handler)
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      spy.disconnect()
+      if (raf) window.cancelAnimationFrame(raf)
     }
   }, [])
 
@@ -136,7 +152,7 @@ export default function Navbar({ dark, toggleTheme, onOpenPalette }: Props) {
       </AnimatePresence>
 
       <div className="nav-progress" aria-hidden="true">
-        <div className="nav-progress-fill" style={{ transform: `scaleX(${progress})` }} />
+        <div ref={fillRef} className="nav-progress-fill" style={{ transform: 'scaleX(0)' }} />
       </div>
     </motion.header>
   )

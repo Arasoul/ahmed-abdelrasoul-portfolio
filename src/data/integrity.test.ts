@@ -74,6 +74,13 @@ describe('certifications & experience integrity', () => {
   it('points certification images into the public images directory', () => {
     for (const c of certifications) {
       if (c.image) expect(c.image).toContain('/images/')
+      if (c.thumb) expect(c.thumb).toContain('/images/thumbs/')
+    }
+  })
+
+  it('has a thumbnail wherever a certification image exists', () => {
+    for (const c of certifications) {
+      if (c.image) expect(c.thumb).toBeTruthy()
     }
   })
 

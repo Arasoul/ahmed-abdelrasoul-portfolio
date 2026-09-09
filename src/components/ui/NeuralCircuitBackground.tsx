@@ -1,8 +1,43 @@
+import { useEffect, useRef, useState } from 'react'
+
 interface Props {
   className?: string
 }
 
+function usePrefersReducedMotion() {
+  const [reduced, setReduced] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  )
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const onChange = () => setReduced(mq.matches)
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [])
+  return reduced
+}
+
 export default function NeuralCircuitBackground({ className = '' }: Props) {
+  const reduced = usePrefersReducedMotion()
+  const svgRef = useRef<SVGSVGElement | null>(null)
+
+  useEffect(() => {
+    if (reduced) return
+    let idleTimer = 0
+    const resume = () => svgRef.current?.unpauseAnimations()
+    const pause = () => {
+      svgRef.current?.pauseAnimations()
+      window.clearTimeout(idleTimer)
+      idleTimer = window.setTimeout(resume, 250)
+    }
+    window.addEventListener('scroll', pause, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', pause)
+      window.clearTimeout(idleTimer)
+      resume()
+    }
+  }, [reduced])
+
   return (
     <div className={`pointer-events-none fixed inset-0 z-0 overflow-hidden ${className}`}>
       <div className="absolute inset-0" style={{ background: 'var(--glow-blue)' }} />
@@ -10,6 +45,7 @@ export default function NeuralCircuitBackground({ className = '' }: Props) {
       <div className="absolute inset-0" style={{ background: 'var(--glow-purple)' }} />
 
       <svg
+        ref={svgRef}
         className="absolute inset-0 h-full w-full"
         style={{ opacity: 'var(--bg-pattern-opacity)' }}
         viewBox="0 0 1440 900"
@@ -51,13 +87,6 @@ export default function NeuralCircuitBackground({ className = '' }: Props) {
           <line key={`nl-${i}`} x1={line[0]} y1={line[1]} x2={line[2]} y2={line[3]}
             stroke="url(#neuralGrad)" strokeWidth={0.6} opacity={0.35}
           />
-        ))}
-
-        {/* Data pulses */}
-        {[[80, 200, 150, 120], [200, 280, 260, 350], [120, 400, 180, 500], [160, 700, 100, 800]].map((p, i) => (
-          <circle key={`pulse-${i}`} r={2} fill="var(--accent)" opacity={0.5}>
-            <animateMotion dur={`${3 + i * 0.4}s`} repeatCount="indefinite" path={`M${p[0]},${p[1]} L${p[2]},${p[3]}`} />
-          </circle>
         ))}
 
         {/* Center transition zone */}
@@ -124,35 +153,28 @@ export default function NeuralCircuitBackground({ className = '' }: Props) {
           />
         ))}
 
-        {/* Layer 3: Floating particles */}
-        {Array.from({ length: 40 }).map((_, i) => (
+        {/* Layer 3: Floating particles (transform-based, reduced count) */}
+        {Array.from({ length: 10 }).map((_, i) => (
           <circle key={`p-${i}`} r={0.6 + (i % 3) * 0.4}
-            fill={i < 14 ? 'var(--accent)' : i < 28 ? 'var(--accent-secondary)' : 'var(--accent-highlight)'}
+            fill={i < 4 ? 'var(--accent)' : i < 7 ? 'var(--accent-secondary)' : 'var(--accent-highlight)'}
             opacity={0.12}
           >
-            <animate attributeName="cx" values={`${(i * 37) % 1440};${(i * 53 + 200) % 1440}`}
-              dur={`${12 + (i % 10) * 2}s`} repeatCount="indefinite" />
-            <animate attributeName="cy" values={`${(i * 29) % 900};${(i * 41 + 150) % 900}`}
-              dur={`${14 + (i % 8) * 2}s`} repeatCount="indefinite" />
-            <animate attributeName="opacity" values="0;0.18;0"
-              dur={`${4 + (i % 6) * 1.5}s`} repeatCount="indefinite" />
+            {!reduced && <animate attributeName="cx" values={`${(i * 37) % 1440};${(i * 53 + 200) % 1440}`} dur={`${12 + (i % 10) * 2}s`} repeatCount="indefinite" />}
+            {!reduced && <animate attributeName="cy" values={`${(i * 29) % 900};${(i * 41 + 150) % 900}`} dur={`${14 + (i % 8) * 2}s`} repeatCount="indefinite" />}
+            {!reduced && <animate attributeName="opacity" values="0;0.18;0" dur={`${4 + (i % 6) * 1.5}s`} repeatCount="indefinite" />}
           </circle>
         ))}
 
         {/* Larger glowing nodes */}
-        {Array.from({ length: 6 }).map((_, i) => (
+        {Array.from({ length: 3 }).map((_, i) => (
           <circle key={`gn-${i}`} r={1.5 + i * 0.3}
             fill={i < 2 ? 'var(--accent)' : i < 4 ? 'var(--accent-secondary)' : 'var(--accent-highlight)'}
             opacity={0.08}
           >
-            <animate attributeName="cx" values={`${200 + i * 180};${300 + i * 160}`}
-              dur={`${8 + i * 2}s`} repeatCount="indefinite" />
-            <animate attributeName="cy" values={`${150 + i * 100};${250 + i * 80}`}
-              dur={`${10 + i * 2}s`} repeatCount="indefinite" />
-            <animate attributeName="r" values={`${1.5 + i * 0.3};${2.5 + i * 0.5};${1.5 + i * 0.3}`}
-              dur={`${3 + i * 0.5}s`} repeatCount="indefinite" />
-            <animate attributeName="opacity" values="0.05;0.15;0.05"
-              dur={`${3 + i * 0.5}s`} repeatCount="indefinite" />
+            {!reduced && <animate attributeName="cx" values={`${200 + i * 180};${300 + i * 160}`} dur={`${8 + i * 2}s`} repeatCount="indefinite" />}
+            {!reduced && <animate attributeName="cy" values={`${150 + i * 100};${250 + i * 80}`} dur={`${10 + i * 2}s`} repeatCount="indefinite" />}
+            {!reduced && <animate attributeName="r" values={`${1.5 + i * 0.3};${2.5 + i * 0.5};${1.5 + i * 0.3}`} dur={`${3 + i * 0.5}s`} repeatCount="indefinite" />}
+            {!reduced && <animate attributeName="opacity" values="0.05;0.15;0.05" dur={`${3 + i * 0.5}s`} repeatCount="indefinite" />}
           </circle>
         ))}
 
@@ -162,12 +184,7 @@ export default function NeuralCircuitBackground({ className = '' }: Props) {
         </pattern>
         <rect x="0" y="0" width="1440" height="900" fill="url(#bg-grid)" opacity={0.25} />
 
-        {/* Circuit flow pulse */}
-        <circle r={2.5} fill="var(--accent-secondary)" opacity={0.3}>
-          <animateMotion dur="14s" repeatCount="indefinite"
-            path="M580,180 L780,180 L750,300 L920,300 L850,420 L550,420 L620,540 L920,540 L880,660 L580,660 L600,780 L900,780 L720,780 L720,540 L800,420 L750,300 L700,180 L580,180" />
-        </circle>
-      </svg>
+        </svg>
     </div>
   )
 }

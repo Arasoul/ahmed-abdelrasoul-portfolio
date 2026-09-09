@@ -15,34 +15,19 @@ export default function FloorRail() {
   const [active, setActive] = useState('origin')
 
   useEffect(() => {
-    let raf = 0
-    const update = () => {
-      raf = 0
-      const mid = window.innerHeight / 2
-      let cur = stops[0].id
-      let best = Infinity
-      for (const s of stops) {
-        const el = document.getElementById(s.id)
-        if (!el) continue
-        const d = Math.abs(el.getBoundingClientRect().top - mid)
-        if (d < best) {
-          best = d
-          cur = s.id
+    const spy = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) setActive(entry.target.id)
         }
-      }
-      setActive(cur)
+      },
+      { rootMargin: '-40% 0px -55% 0px', threshold: 0 },
+    )
+    for (const s of stops) {
+      const el = document.getElementById(s.id)
+      if (el) spy.observe(el)
     }
-    const onScroll = () => {
-      if (!raf) raf = requestAnimationFrame(update)
-    }
-    update()
-    window.addEventListener('scroll', onScroll)
-    window.addEventListener('resize', onScroll)
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('resize', onScroll)
-      if (raf) cancelAnimationFrame(raf)
-    }
+    return () => spy.disconnect()
   }, [])
 
   return (

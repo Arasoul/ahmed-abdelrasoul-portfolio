@@ -97,6 +97,7 @@ export interface Certification {
   skills: string[]
   link?: string
   image?: string
+  thumb?: string
   gallery?: string[]
 }
 

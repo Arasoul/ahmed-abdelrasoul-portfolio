@@ -11,6 +11,7 @@ export const certifications: Certification[] = [
     credentialId: 'AI & ML Diploma',
     skills: ['Machine Learning', 'Deep Learning', 'Computer Vision', 'NLP', 'MLOps', 'Model Deployment'],
     image: withBase('/images/AMIT AI1.png'),
+    thumb: withBase('/images/thumbs/AMIT AI1-thumb.jpg'),
     gallery: [withBase('/images/AMIT AI1.png'), withBase('/images/AMIT AI2.png')],
   },
   {
@@ -22,6 +23,7 @@ export const certifications: Certification[] = [
     credentialId: 'HCIA Big Data V3.5',
     skills: ['Big Data', 'Hadoop', 'Hive', 'MapReduce', 'Data Storage'],
     image: withBase('/images/HCIA Big Data V3.5.png'),
+    thumb: withBase('/images/thumbs/HCIA Big Data V3.5-thumb.jpg'),
   },
   {
     id: 'bue-ai',
@@ -32,6 +34,7 @@ export const certifications: Certification[] = [
     credentialId: 'AI Certificate',
     skills: ['Artificial Intelligence', 'Problem Solving', 'AI Ethics', 'Intelligent Systems'],
     image: withBase('/images/impact AI.png'),
+    thumb: withBase('/images/thumbs/impact AI-thumb.jpg'),
   },
   {
     id: 'bue-cybersecurity',
@@ -42,6 +45,7 @@ export const certifications: Certification[] = [
     credentialId: 'Cybersecurity Certificate',
     skills: ['Network Security', 'Threat Detection', 'Security Fundamentals', 'Risk Assessment'],
     image: withBase('/images/Cyber Security BUE1.png'),
+    thumb: withBase('/images/thumbs/Cyber Security BUE1-thumb.jpg'),
     gallery: [withBase('/images/Cyber Security BUE1.png'), withBase('/images/Cyber Security BUE2.png')],
   },
   {
@@ -53,6 +57,7 @@ export const certifications: Certification[] = [
     credentialId: 'ML/DL Certificate',
     skills: ['Machine Learning', 'Deep Learning', 'Neural Networks', 'Model Optimization', 'TensorFlow'],
     image: withBase('/images/zewail AI1.png'),
+    thumb: withBase('/images/thumbs/zewail AI1-thumb.jpg'),
     gallery: [withBase('/images/zewail AI1.png'), withBase('/images/zewail AI2.png')],
   },
   {
@@ -64,6 +69,7 @@ export const certifications: Certification[] = [
     credentialId: 'PM Certificate',
     skills: ['Project Planning', 'Agile Methodologies', 'Risk Management', 'Team Leadership'],
     image: withBase('/images/Project management BUE1.png'),
+    thumb: withBase('/images/thumbs/Project management BUE1-thumb.jpg'),
     gallery: [withBase('/images/Project management BUE1.png'), withBase('/images/Project management BUE2.png')],
   },
   {
@@ -75,6 +81,7 @@ export const certifications: Certification[] = [
     credentialId: 'SE Training Certificate',
     skills: ['Software Engineering', 'C++', 'Python', 'OOP', 'Data Structures', 'Testing', 'Debugging'],
     image: withBase('/images/fuzetek certificate.jpeg'),
+    thumb: withBase('/images/thumbs/fuzetek certificate-thumb.jpg'),
   },
   {
     id: 'dolab-da',
@@ -85,6 +92,7 @@ export const certifications: Certification[] = [
     credentialId: 'DA Training Certificate',
     skills: ['Data Analysis', 'Data Cleaning', 'SQL', 'Power BI', 'Data Visualization', 'Dashboard Development', 'Business Intelligence'],
     image: withBase('/images/Dolab.jpg'),
+    thumb: withBase('/images/thumbs/Dolab-thumb.jpg'),
     gallery: [withBase('/images/Dolab.jpg'), withBase('/images/Dolab-DA.png'), withBase('/images/Dolab-practical.png')],
   },
   {
@@ -96,6 +104,7 @@ export const certifications: Certification[] = [
     credentialId: 'ITIDA Freelancing Program',
     skills: ['Freelancing', 'Client Communication', 'Proposal Writing', 'Professional Development', 'Business Value'],
     image: withBase('/images/itida_Freelancing.jpg'),
+    thumb: withBase('/images/thumbs/itida_Freelancing-thumb.jpg'),
     gallery: [withBase('/images/itida_Freelancing.jpg')],
   },
   {
@@ -107,5 +116,6 @@ export const certifications: Certification[] = [
     credentialId: 'AI Ambassador Certificate',
     skills: ['Artificial Intelligence', 'Leadership', 'Community Engagement', 'Communication'],
     image: withBase('/images/Ambassador Certificate AI.png'),
+    thumb: withBase('/images/thumbs/Ambassador Certificate AI-thumb.jpg'),
   },
 ]
