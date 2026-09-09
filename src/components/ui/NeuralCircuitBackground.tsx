@@ -1,43 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
-
 interface Props {
   className?: string
 }
 
-function usePrefersReducedMotion() {
-  const [reduced, setReduced] = useState(
-    () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
-  )
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const onChange = () => setReduced(mq.matches)
-    mq.addEventListener('change', onChange)
-    return () => mq.removeEventListener('change', onChange)
-  }, [])
-  return reduced
-}
-
 export default function NeuralCircuitBackground({ className = '' }: Props) {
-  const reduced = usePrefersReducedMotion()
-  const svgRef = useRef<SVGSVGElement | null>(null)
-
-  useEffect(() => {
-    if (reduced) return
-    let idleTimer = 0
-    const resume = () => svgRef.current?.unpauseAnimations()
-    const pause = () => {
-      svgRef.current?.pauseAnimations()
-      window.clearTimeout(idleTimer)
-      idleTimer = window.setTimeout(resume, 250)
-    }
-    window.addEventListener('scroll', pause, { passive: true })
-    return () => {
-      window.removeEventListener('scroll', pause)
-      window.clearTimeout(idleTimer)
-      resume()
-    }
-  }, [reduced])
-
   return (
     <div className={`pointer-events-none fixed inset-0 z-0 overflow-hidden ${className}`}>
       <div className="absolute inset-0" style={{ background: 'var(--glow-blue)' }} />
@@ -45,7 +10,6 @@ export default function NeuralCircuitBackground({ className = '' }: Props) {
       <div className="absolute inset-0" style={{ background: 'var(--glow-purple)' }} />
 
       <svg
-        ref={svgRef}
         className="absolute inset-0 h-full w-full"
         style={{ opacity: 'var(--bg-pattern-opacity)' }}
         viewBox="0 0 1440 900"
@@ -153,29 +117,42 @@ export default function NeuralCircuitBackground({ className = '' }: Props) {
           />
         ))}
 
-        {/* Layer 3: Floating particles (transform-based, reduced count) */}
+        {/* Layer 3: Floating particles (CSS-transform drift, compositor-only) */}
         {Array.from({ length: 10 }).map((_, i) => (
-          <circle key={`p-${i}`} r={0.6 + (i % 3) * 0.4}
+          <circle
+            key={`p-${i}`}
+            className="neural-float"
+            cx={180 + i * 90}
+            cy={120 + (i % 5) * 150}
+            r={0.6 + (i % 3) * 0.4}
             fill={i < 4 ? 'var(--accent)' : i < 7 ? 'var(--accent-secondary)' : 'var(--accent-highlight)'}
-            opacity={0.12}
-          >
-            {!reduced && <animate attributeName="cx" values={`${(i * 37) % 1440};${(i * 53 + 200) % 1440}`} dur={`${12 + (i % 10) * 2}s`} repeatCount="indefinite" />}
-            {!reduced && <animate attributeName="cy" values={`${(i * 29) % 900};${(i * 41 + 150) % 900}`} dur={`${14 + (i % 8) * 2}s`} repeatCount="indefinite" />}
-            {!reduced && <animate attributeName="opacity" values="0;0.18;0" dur={`${4 + (i % 6) * 1.5}s`} repeatCount="indefinite" />}
-          </circle>
+            opacity={0.14}
+            style={{
+              ['--tx' as string]: `${(i * 37) % 120}px`,
+              ['--ty' as string]: `${-((i * 29) % 80) - 20}px`,
+              animationDuration: `${12 + (i % 10) * 2}s`,
+              animationDelay: `${i * 1.7}s`,
+            }}
+          />
         ))}
 
         {/* Larger glowing nodes */}
         {Array.from({ length: 3 }).map((_, i) => (
-          <circle key={`gn-${i}`} r={1.5 + i * 0.3}
-            fill={i < 2 ? 'var(--accent)' : i < 4 ? 'var(--accent-secondary)' : 'var(--accent-highlight)'}
-            opacity={0.08}
-          >
-            {!reduced && <animate attributeName="cx" values={`${200 + i * 180};${300 + i * 160}`} dur={`${8 + i * 2}s`} repeatCount="indefinite" />}
-            {!reduced && <animate attributeName="cy" values={`${150 + i * 100};${250 + i * 80}`} dur={`${10 + i * 2}s`} repeatCount="indefinite" />}
-            {!reduced && <animate attributeName="r" values={`${1.5 + i * 0.3};${2.5 + i * 0.5};${1.5 + i * 0.3}`} dur={`${3 + i * 0.5}s`} repeatCount="indefinite" />}
-            {!reduced && <animate attributeName="opacity" values="0.05;0.15;0.05" dur={`${3 + i * 0.5}s`} repeatCount="indefinite" />}
-          </circle>
+          <circle
+            key={`gn-${i}`}
+            className="neural-glow"
+            cx={200 + i * 180}
+            cy={150 + i * 100}
+            r={2 + i * 0.4}
+            fill={i < 2 ? 'var(--accent)' : i < 3 ? 'var(--accent-secondary)' : 'var(--accent-highlight)'}
+            opacity={0.1}
+            style={{
+              ['--tx' as string]: `${60 + i * 40}px`,
+              ['--ty' as string]: `${-(40 + i * 25)}px`,
+              animationDuration: `${3.6 + i * 0.5}s`,
+              animationDelay: `${i * 0.8}s`,
+            }}
+          />
         ))}
 
         {/* Layer 4: Engineering grid */}

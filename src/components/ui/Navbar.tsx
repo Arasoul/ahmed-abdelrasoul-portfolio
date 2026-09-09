@@ -69,8 +69,8 @@ export default function Navbar({ dark, toggleTheme, onOpenPalette }: Props) {
 
   return (
     <motion.header initial={{ y: -80 }} animate={{ y: 0 }} transition={{ duration: 0.5, ease: 'easeOut' }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'border-b shadow-sm backdrop-blur-2xl' : 'bg-transparent'}`}
-      style={{ backgroundColor: scrolled ? 'var(--bg-glass-strong)' : 'transparent', borderColor: scrolled ? 'var(--border-subtle)' : 'transparent' }}
+      className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${scrolled ? 'border-b shadow-sm' : 'bg-transparent'}`}
+      style={{ backgroundColor: scrolled ? 'var(--bg-surface)' : 'transparent', borderColor: scrolled ? 'var(--border-subtle)' : 'transparent' }}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-8">
         <button onClick={() => handleClick('#origin')} className="flex items-center gap-2.5 group">

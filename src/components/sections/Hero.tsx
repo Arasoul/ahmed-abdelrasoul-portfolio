@@ -5,8 +5,8 @@ import { personalInfo } from '../../data/personal'
 import { withBase } from '../../utils/assetPath'
 
 const heroFrames = [
-  { src: withBase('/images/hero-dark.png'), label: 'Portrait' },
-  { src: withBase('/images/me-light.png'), label: 'Studio' },
+  { src: withBase('/images/hero-dark.jpg'), label: 'Portrait' },
+  { src: withBase('/images/me-light.jpg'), label: 'Studio' },
 ]
 
 const prefersReducedMotion =
