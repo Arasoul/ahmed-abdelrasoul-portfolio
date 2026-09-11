@@ -16,13 +16,13 @@ A production-ready, single-page **engineering portfolio + case-study archive** f
 - **Two page templates:** the one-scroll **HomePage** and route-split lazy-loaded **`/projects/:id`** case-study pages.
 - **Typed `src/data/` layer** (`projects` (24), `experience`, `certifications`, `skills` (4 capability groups), `personal`, `chapters`) drives the UI, the assistant, and the test suite. `Experience.current` is now a **required** field (compile-time enforced; `current: false` padded on past roles).
 - **Portfolio Intelligence assistant:** the browser only calls **`api/portfolio-ai.ts`** (serverless proxy to an OpenAI-compatible endpoint). No key in the bundle (only `VITE_LLM_ENABLED` flag; server reads `LLM_API_KEY`/`LLM_ENDPOINT`/`LLM_MODEL`, model default `gpt-4o-mini`). Local deterministic `answer(text)` retrieval remains the offline/static-host fallback (45 s abort).
-- **Deploys to Vercel** (`arasoul.dev`; `/api/portfolio-ai` runs there) and ships a **GitHub Pages** workflow (`.github/workflows/deploy.yml`: lint + test + typecheck + `VITE_GITHUB_PAGES=true` build, plus `404.html` SPA fallback). Base path derives from the repo name at build time (`vite.config.ts` `pagesBase` from `GITHUB_REPOSITORY`, set only in Actions). Favicon/touch-icon tags use `%BASE_URL%favicon.*` so they resolve under the Pages sub-path (simulated Pages build emitted `/portfolio/favicon.svg` correctly).
+- **Deploys to Vercel only** (`arasoul.dev`; `/api/portfolio-ai` runs there). `vercel.json` rewrites non-`/api` routes to `/index.html` so deep project routes work on direct navigation. Favicon/touch-icon tags use `%BASE_URL%favicon.*` and resolve at root (`%BASE_URL%` = `/`).
 
 **Stack notes:** Vite 8 + `@vitejs/plugin-react`, Tailwind 4 via `@tailwindcss/vite` with a large custom design-token system in `src/index.css`, React 19, React Router 7, Framer Motion, react-icons (Feather), **self-hosted latin-subset variable fonts** (Inter / JetBrains Mono / Space Grotesk — 3 woff2, ≈ 108 KB total), oxlint, Vitest. Production build is code-split (`react-vendor` / `motion` / `icons` / route chunks); main entry 143.7 kB (≈ 41 kB gzip). `package.json` enforces `engines.node >= 20`.
 
 ### Reusable description (for README / CV / socials)
 
-> A Vite + React 19 + TypeScript engineering portfolio presenting seven chapters of work — identity, domain map, systems, experience, engineering method, current focus, and contact. Features a typed, data-driven case-study archive (24 projects), interactive pipeline visualizations (AutoBI, AI Pharaoh, Meridian Wings), a Ctrl+K command palette, dark/light theming with a floor-rail and sticky-context navigation, a contact form (Web3Forms with mailto fallback), and a built-in "Portfolio Intelligence" assistant whose browser code talks only to a key-free serverless proxy (local retrieval fallback, no secrets in the bundle). Verified with 37 Vitest data-integrity tests and a clean oxlint + `tsc -b` build; deployed to Vercel with a parallel GitHub Pages pipeline.
+> A Vite + React 19 + TypeScript engineering portfolio presenting seven chapters of work — identity, domain map, systems, experience, engineering method, current focus, and contact. Features a typed, data-driven case-study archive (24 projects), interactive pipeline visualizations (AutoBI, AI Pharaoh, Meridian Wings), a Ctrl+K command palette, dark/light theming with a floor-rail and sticky-context navigation, a contact form (Web3Forms with mailto fallback), and a built-in "Portfolio Intelligence" assistant whose browser code talks only to a key-free serverless proxy (local retrieval fallback, no secrets in the bundle). Verified with 37 Vitest data-integrity tests and a clean oxlint + `tsc -b` build; deployed to Vercel.
 
 ---
 
@@ -34,7 +34,7 @@ A production-ready, single-page **engineering portfolio + case-study archive** f
 4. **Modular, reusable engineering.** The systems chapter groups projects into a pipeline (AutoBI, AutoEDA, DataPrepToolkit, web-scraping toolkit as an ecosystem) and surfaces all 24 projects — flagships, ecosystem tools, then the secondary grid with a "View More Work" toggle and global ordering via `indexPriority` in `SystemsProducts.tsx`.
 5. **Serverless LLM boundary done right.** `api/portfolio-ai.ts` guards: POST-only (405), origin allowlist + browser-key-less design (403), body/message/size caps (100 KB / 8 msgs / 8 KB), 503 without a key. A dist sweep confirmed zero `LLM_API_KEY`/`Bearer`/`sk-*` tokens in the shipped JS.
 6. **Performance is genuinely tuned.** Self-hosted latin-only variable fonts (≈ 108 KB), everything code-split, `chunkSizeWarningLimit: 500` set honestly. All heavy raster images converted: 12 certificate/credential images PNG → JPEG q85 and the 3 heavy project gallery PNGs (`pharouh.png` 945 KB → 154 KB, `AutoEDA.png` 1.2 MB → 196 KB, `dataPrepToolkit.png` 1.4 MB → 204 KB, q88) — 84–86 % smaller each, refs updated in `projects.ts` + `PharaohPipeline.tsx`.
-7. **Deploy strategy is thoughtful.** Vercel rewrite rules serve the SPA + `/api`; GH Pages workflow runs the full lint/test/typecheck gate with base-path derivation, `VITE_WEB3FORMS_ACCESS_KEY` now injected from the repo secret, plus `404.html` and `robots.txt` in `dist`.
+7. **Deploy strategy is Vercel-only and deliberately single-path.** Vercel rewrite rules serve the SPA + `/api`; no GitHub Pages pipeline exists, so the assistant's `/api` proxy and deep-link rewrites behave identically everywhere.
 8. **Accessibility basics present and hardened.** Skip link, `prefers-reduced-motion` as a live hook (`usePrefersReducedMotion`), `MotionConfig reducedMotion="user"`, aria labels, `useFocusTrap` on command palette, assistant panel, and certificate lightbox with return-focus; muted-text contrast raised to AA.
 9. **Route-level SEO.** `RouteMeta` in `App.tsx` emits per-route `<title>` (`{project} — {category} | Ahmed Abdelrasoul`), description from `overview`, canonical `origin+pathname`, and og:title/twitter overrides; `robots.txt` ships; JSON-LD Person schema in `index.html`.
 10. **Resilient deep-linking.** `ScrollToTop` retries the hash until the lazy case-study chunk mounts (25×/60 ms), fixing the old "hash won't scroll on `/projects/:id`" bug; theme flash prevented by the inline bootstrap; case-sensitive imports audited (passes — important for Linux CI).
@@ -63,8 +63,7 @@ A production-ready, single-page **engineering portfolio + case-study archive** f
 | **Assistant experience/current answers hardcoded** | **Fixed** — assistant is fully data-driven (`chapters.ts` order + live data), retired `flagOr`. |
 | **Dead `web-applications` category** | **Fixed** — removed. |
 | **README said "Google Fonts" while fonts are self-hosted / wrong `LLM_MODEL` default** | **Fixed** — documents self-hosted latin fonts, server-side LLM env (only `LLM_API_KEY` required; `LLM_MODEL` default now `gpt-4o-mini`), Vercel-recommended deployment. |
-| **GH Pages favicon paths absolute** | **Fixed** — `%BASE_URL%favicon.*` in `index.html`; simulated Pages build emitted `/portfolio/favicon.svg` + `/portfolio/assets/...`. Verified. |
-| **GH Pages workflow lacks form key** | **Fixed** — `VITE_WEB3FORMS_ACCESS_KEY: ${{ secrets.WEB3FORMS_ACCESS_KEY }}` added to the Build step; `.env.example` documents the var; mailto fallback remains. |
+| **Stale GitHub Pages deployment code** | **Fixed** — GH Pages is not part of production (Vercel only): removed `.github/workflows/deploy.yml`, the `VITE_GITHUB_PAGES`/`pagesBase` base-path handling in `vite.config.ts`, and the `404.html` copy step (Vercel `rewrites` already serve the SPA); README and analysis doc updated. |
 | **`og:image` reuses `favicon.png`** | **Accepted** — favicon reuses the brand square (OG-safe absolute `https://arasoul.dev/favicon.png`); per-project OG cards are the one remaining P2 suggestion, not a defect. |
 
 ---
@@ -73,7 +72,7 @@ A production-ready, single-page **engineering portfolio + case-study archive** f
 
 ### Open / minor (accepted, none blocking)
 
-- **LLM assistant requires a host with `/api`.** GH Pages has no `/api`, so visitors on the mirror get silent local answers. Known and documented ("Vercel recommended"); a runtime hint is P2 polish, not a defect.
+- **LLM assistant requires a host with `/api`.** Only Vercel (and other serverless hosts) run `/api/portfolio-ai`; elsewhere the assistant silently uses local retrieval answers. Vercel is the only deployment, so this is consistent in production. A runtime hint is P2 polish, not a defect.
 - **`api/portfolio-ai.ts` origin allowlist includes `http://localhost:5173`** — intended dev-only entry so the assistant works locally; harmless in production (never matches a live origin).
 - **`og:image` is still the favicon.** Per-project OG images would improve shares (flagged P2 in §5).
 - **CV updated but not visually rendered.** `public/Ahmed-CV.pdf` replaced and all `resumeUrl` links point to it; PDF content/layout not rendered for verification — leave to a human QA pass.
@@ -115,7 +114,7 @@ Weights reflect what matters most for a hiring-oriented engineering portfolio. E
 | SEO & metadata | 0.7 | 8.8 | Per-route title/description/canonical/OG, robots.txt, JSON-LD; `og:image` still the favicon |
 | Security | 0.8 | 9.3 | Key-free server proxy, origin allowlist, size caps, clean dist sweep; Web3Forms key is client-safe by design |
 | Maintainability | 0.8 | 8.6 | Data-driven with derived chapters; shared hooks; some scroll-spy duplication + hand-ordered role arrays |
-| Deployment & ops | 0.7 | 8.6 | Vercel rewrites + GH Pages workflow (lint/test/tsc gate + form key + base handling) + 404 fallback; LLM Vercel-only is documented |
+| Deployment & ops | 0.7 | 8.6 | Single Vercel pipeline: SPA rewrites + `/api` proxy; no parallel Pages deploy; LLM Vercel-only is documented |
 
 **Weighted score ≈ 9.0 / 10 — "Excellent."**
 
@@ -134,7 +133,7 @@ Weights reflect what matters most for a hiring-oriented engineering portfolio. E
 
 ### Bottom line
 
-This is a **distinctive, production-grade portfolio that markets the author's core differentiator — validated, deterministic, productized intelligent systems — extremely well.** The V4 brief is fully applied (7-chapter narrative with Experience at 04, education module, single-source CTA/index logic), and every high-impact issue from prior analysis is resolved and re-verified: client-exposed LLM key, inconsistent numbering, hidden projects, empty case-study blocks, single big chunk, missing focus management, multi-MB images (certs *and* project PNGs), GH Pages favicon/404 path gaps, and workflow env. The remaining work is purely polish: commit the batch, human visual-QA on the CV/fonts, and optionally per-project OG cards. Score **≈ 9.0 / 10**.
+This is a **distinctive, production-grade portfolio that markets the author's core differentiator — validated, deterministic, productized intelligent systems — extremely well.** The V4 brief is fully applied (7-chapter narrative with Experience at 04, education module, single-source CTA/index logic), and every high-impact issue from prior analysis is resolved and re-verified: client-exposed LLM key, inconsistent numbering, hidden projects, empty case-study blocks, single big chunk, missing focus management, multi-MB images (certs *and* project PNGs), and stale GitHub Pages deployment code. The remaining work is purely polish: commit the batch, human visual-QA on the CV/fonts, and optionally per-project OG cards. Score **≈ 9.0 / 10**.
 
 ### Final QA checklist (this revision)
 
@@ -145,8 +144,8 @@ This is a **distinctive, production-grade portfolio that markets the author's co
 - **Console hygiene:** zero `console.*` in `src`.
 - **A11y:** skip link, focus traps, live reduced-motion, AA contrast documented.
 - **Security:** dist sweep clean of `sk-*`/`VITE_*_API_KEY`/`LLM_API_KEY`; `.env` untracked; developer-origin allowlist justified.
-- **Root cleanup:** `robots.txt` and `dist/404.html` kept; `.env` ignored; no stray files.
-- **CI gating:** GH Actions runs lint + tests + `tsc` + `VITE_GITHUB_PAGES=true` build.
+- **Root cleanup:** `robots.txt` kept; `.env` ignored; no stray files.
+- **CI gating:** builds are validated locally (lint + tests + `tsc` + Vite build) before push; deployment is Vercel-only.
 - **Manual QA:** local preview smoke — `/` 200, `/projects/auto-bi` 200, deep-route SPA fallback 200, favicon 200; direct project URLs / case studies / palette / assistant / contact intended for a final human pass before release.
 
 ---

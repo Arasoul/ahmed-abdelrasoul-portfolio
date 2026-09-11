@@ -292,7 +292,7 @@ export default function SystemsProducts() {
 
         {/* --- LEVEL 1: index + find --- */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={revealed ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.1 }}
-          className="mb-14 grid gap-6 lg:grid-cols-2"
+          className="mb-14 grid min-w-0 gap-6 lg:grid-cols-2"
         >
           <SystemsIndex matchedTopicIds={matchedTopicIds} />
           <FindProject activeTopicId={activeTopicId} onSelect={handleTopicSelect} />

@@ -445,6 +445,7 @@
 .section {
   padding: 5rem 1rem;
   position: relative;
+  overflow-x: clip;
 }
 
 section[id] {
@@ -1373,6 +1374,7 @@ section[id] {
 
 /* --- Systems index (LEVEL 1) --- */
 .systems-index {
+  min-width: 0;
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
   background: var(--bg-surface);
@@ -1422,6 +1424,7 @@ section[id] {
 
 /* --- Find a project (topic chips) --- */
 .find-project {
+  min-width: 0;
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
   background: var(--bg-surface);

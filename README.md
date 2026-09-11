@@ -93,12 +93,7 @@ public/
 
 ## Deployment
 
-**Recommended: Vercel** (`arasoul.dev`). It is the only hosted option that runs the `/api/portfolio-ai` serverless function, so the LLM-enhanced assistant works there. `vercel.json` rewrites non-`/api` routes to `/index.html` so deep project routes work on direct navigation.
-
-The repository also ships a **GitHub Pages** workflow (`.github/workflows/deploy.yml`) that validates lint, tests, typecheck, and build, then publishes `dist/`. The build derives the Vite base path from the repository name automatically, and a `404.html` fallback is generated so project routes work on direct load. To use it:
-
-1. Set **Settings → Pages → Source** to *GitHub Actions*.
-2. Push to `main` — the workflow handles the rest.
+**Vercel** (`arasoul.dev`) is the production host. It runs the `/api/portfolio-ai` serverless function, so the LLM-enhanced assistant works there. `vercel.json` rewrites non-`/api` routes to `/index.html` so deep project routes work on direct navigation. Deployment is triggered automatically by pushes to `main`.
 
 ## License
 

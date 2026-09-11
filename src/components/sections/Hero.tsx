@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { FiArrowRight, FiArrowDown, FiGithub, FiLinkedin, FiMail, FiDownload } from 'react-icons/fi'
 import { personalInfo } from '../../data/personal'
 import { withBase } from '../../utils/assetPath'
+import { chapterNumber } from '../../data/chapters'
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion'
 
 const heroFrames = [
@@ -46,6 +47,7 @@ export default function Hero({ dark = true }: { dark?: boolean }) {
             className="lg:col-span-7"
           >
             <h1 className="hero-headline mb-5 text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl">
+              <span className="section-index block mb-2">{chapterNumber('origin')}</span>
               AHMED
               <br />
               <span className="gradient-text">ABDELRASOUL</span>

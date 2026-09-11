@@ -6,7 +6,7 @@ import { useScrollReveal } from '../../hooks/useScrollReveal'
 import { CONTACT_ACCESS_KEY, CONTACT_ENDPOINT, CONTACT_EMAIL } from '../../config/contact'
 import { chapterNumber } from '../../data/chapters'
 
-type FormStatus = 'idle' | 'sending' | 'sent' | 'error'
+type FormStatus = 'idle' | 'sending' | 'sent' | 'draft' | 'error'
 
 export default function Contact() {
   const [status, setStatus] = useState<FormStatus>('idle')
@@ -21,7 +21,7 @@ export default function Contact() {
     const message = data.get('message') as string
     if (!name || !email || !message) return
 
-    const subject = (data.get('subject') as string) || 'Portfolio contact'
+    const subject = `Portfolio Contact — ${name}`
     const payload = {
       access_key: CONTACT_ACCESS_KEY,
       name,
@@ -36,7 +36,7 @@ export default function Contact() {
       // No access key — open mailto fallback
       const mailto = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`From: ${name} (${email})\n\n${message}`)}`
       window.location.href = mailto
-      setStatus('sent')
+      setStatus('draft')
       setTimeout(() => setStatus('idle'), 8000)
       return
     }
@@ -86,9 +86,9 @@ export default function Contact() {
             </p>
           </motion.div>
 
-          <div className="grid gap-10 md:grid-cols-5">
+          <div className="grid min-w-0 gap-10 md:grid-cols-5">
             <motion.div initial={{ opacity: 0, x: -30 }} animate={revealed ? { opacity: 1, x: 0 } : {}}
-              transition={{ delay: 0.2 }} className="space-y-6 md:col-span-2"
+              transition={{ delay: 0.2 }} className="min-w-0 space-y-6 md:col-span-2"
             >
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl text-accent"
@@ -158,15 +158,23 @@ export default function Contact() {
             </motion.div>
 
             <motion.div initial={{ opacity: 0, x: 30 }} animate={revealed ? { opacity: 1, x: 0 } : {}}
-              transition={{ delay: 0.3 }} className="md:col-span-3"
+              transition={{ delay: 0.3 }} className="min-w-0 md:col-span-3"
             >
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid gap-4 md:grid-cols-2">
-                  <input type="text" name="name" placeholder="Your Name" required aria-label="Your name" className="input" />
-                  <input type="email" name="email" placeholder="Your Email" required aria-label="Your email" className="input" />
+                <div className="grid min-w-0 gap-4 md:grid-cols-2">
+                  <div className="flex flex-col gap-1.5">
+                    <label htmlFor="contact-name" className="text-xs font-medium text-primary">Your Name</label>
+                    <input type="text" id="contact-name" name="name" placeholder="Your Name" required aria-label="Your name" className="input" />
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <label htmlFor="contact-email" className="text-xs font-medium text-primary">Your Email</label>
+                    <input type="email" id="contact-email" name="email" placeholder="Your Email" required aria-label="Your email" className="input" />
+                  </div>
                 </div>
-                <input type="text" name="subject" placeholder="Subject" aria-label="Subject" className="input" />
-                <textarea name="message" placeholder="Describe the problem you want to solve..." required rows={5} aria-label="Message" className="input resize-none" />
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="contact-message" className="text-xs font-medium text-primary">Message</label>
+                  <textarea id="contact-message" name="message" placeholder="Describe the problem you want to solve..." required rows={5} aria-label="Message" className="input resize-none" />
+                </div>
 
                 {CONTACT_ACCESS_KEY ? (
                   <p className="text-[11px] text-muted">
@@ -188,6 +196,9 @@ export default function Contact() {
                   )}
                   {status === 'sent' && (
                     <><FiCheck size={16} /> Message sent</>
+                  )}
+                  {status === 'draft' && (
+                    <><FiMail size={16} /> Email draft opened</>
                   )}
                   {status === 'error' && (
                     <><FiAlertCircle size={16} /> Failed — try again</>
