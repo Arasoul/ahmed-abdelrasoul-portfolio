@@ -1,6 +1,6 @@
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { FiArrowLeft, FiArrowRight, FiGithub, FiExternalLink, FiBookOpen, FiGrid, FiLinkedin, FiMail } from 'react-icons/fi'
-import { projects, projectCategories } from '../data/projects'
+import { projects, projectCategories, projectCtaUrl } from '../data/projects'
 import { personalInfo } from '../data/personal'
 
 const categoryLabel = (id: string) => projectCategories.find((c) => c.id === id)?.label || id
@@ -36,8 +36,12 @@ export default function ProjectCaseStudyPage() {
         : project.approach
           ? { index: '04', label: 'HOW', title: 'How it works', body: project.approach, items: project.features }
           : null,
-      { index: '05', label: 'ENGINEERING', title: 'The engineering', body: project.challenges, items: project.technologies },
-      { index: '06', label: 'EVIDENCE', title: 'Verified evidence', items: project.features },
+      project.challenges || (project.technologies ?? []).length > 0
+        ? { index: '05', label: 'ENGINEERING', title: 'The engineering', body: project.challenges, items: project.technologies }
+        : null,
+      project.features && project.features.length > 0
+        ? { index: '06', label: 'EVIDENCE', title: 'Verified evidence', items: project.features }
+        : null,
       project.impact
         ? { index: '07', label: 'RESULT', title: 'The result', body: project.impact, tone: 'accent' as const }
         : null,
@@ -45,11 +49,13 @@ export default function ProjectCaseStudyPage() {
         ? { index: '08', label: 'LIMITATIONS', title: `What ${project.title} does not do yet`, items: project.limitations }
         : null,
     ] as (Block | null)[]
-  ).filter((b): b is Block => b !== null)
+  )
+    .filter((b): b is Block => b !== null)
+    .map((b, i) => ({ ...b, index: String(i + 1).padStart(2, '0') }))
 
   const exploreLinks: { label: string; href?: string; icon: React.ReactNode }[] = [
     { label: 'Source code', href: project.github, icon: <FiGithub size={12} /> },
-    { label: project.ctaLabel || 'Product / demo', href: project.productUrl || project.demo, icon: <FiExternalLink size={12} /> },
+    { label: project.ctaLabel || 'Product / demo', href: projectCtaUrl(project), icon: <FiExternalLink size={12} /> },
     { label: 'Live system', href: project.live, icon: <FiExternalLink size={12} /> },
   ].filter((l) => Boolean(l.href))
 
@@ -94,8 +100,8 @@ export default function ProjectCaseStudyPage() {
               <FiGithub size={14} /> Source
             </a>
           )}
-          {(project.productUrl || project.demo) && (
-            <a href={project.productUrl || project.demo} target="_blank" rel="noopener noreferrer" className="cs-btn">
+          {projectCtaUrl(project) && (
+            <a href={projectCtaUrl(project)} target="_blank" rel="noopener noreferrer" className="cs-btn">
               <FiExternalLink size={14} /> {project.ctaLabel || 'Explore'}
             </a>
           )}
@@ -144,7 +150,7 @@ export default function ProjectCaseStudyPage() {
         {/* EXPLORE */}
         <section id="cs-explore" className="cs-block">
           <div className="cs-block-head">
-            <span className="cs-block-num font-mono">09</span>
+            <span className="cs-block-num font-mono">{String(blocks.length + 1).padStart(2, '0')}</span>
             <span className="term-label-accent">EXPLORE</span>
           </div>
           <div className="cs-block-content">

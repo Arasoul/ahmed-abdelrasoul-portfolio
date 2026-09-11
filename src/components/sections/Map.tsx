@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { FiArrowDown } from 'react-icons/fi'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 import { scrollToHash } from '../../utils/scroll'
+import { chapterNumber } from '../../data/chapters'
 
 interface DomainBranch {
   domain: string
@@ -90,7 +91,7 @@ export default function Map() {
           transition={{ duration: 0.5 }}
           className="section-head"
         >
-          <span className="section-index">02 / 07</span>
+          <span className="section-index">{chapterNumber('map')}</span>
           <h2 className="section-title map-title">Map</h2>
           <div className="section-rule" />
         </motion.div>

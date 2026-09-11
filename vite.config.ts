@@ -10,7 +10,25 @@ const pagesBase = repoName && !isUserSite ? `/${repoName}/` : '/'
 export default defineConfig({
   base: process.env.VITE_GITHUB_PAGES === 'true' ? pagesBase : '/',
   build: {
-    chunkSizeWarningLimit: 600,
+    chunkSizeWarningLimit: 500,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('/node_modules/react/') || id.includes('/node_modules/react-dom/') || id.includes('/node_modules/react-router')) {
+            return 'react-vendor'
+          }
+          if (id.includes('/node_modules/framer-motion/') || id.includes('/node_modules/motion-dom/')) {
+            return 'motion'
+          }
+          if (id.includes('/node_modules/react-icons/')) {
+            return 'icons'
+          }
+          if (id.includes('/node_modules/')) {
+            return 'vendor'
+          }
+        },
+      },
+    },
   },
   plugins: [
     react(),

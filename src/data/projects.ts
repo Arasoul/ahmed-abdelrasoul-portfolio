@@ -27,7 +27,7 @@ export const projects: Project[] = [
     timeline: '2026',
     role: 'AI Engineer & Computer Vision Developer',
     github: 'https://github.com/Arasoul/AI-Pharaoh',
-    gallery: [withBase('/images/pharouh.png')],
+    gallery: [withBase('/images/pharouh.jpg')],
     difficulty: 'expert',
     projectType: 'research',
     ecosystem: 'flagship',
@@ -67,7 +67,7 @@ export const projects: Project[] = [
     demo: 'https://pypi.org/project/autoeda/',
     productUrl: '',
     ctaLabel: 'Explore',
-    gallery: [withBase('/images/AutoEDA.png')],
+    gallery: [withBase('/images/AutoEDA.jpg')],
     difficulty: 'advanced',
     projectType: 'library',
     ecosystem: 'tool',
@@ -142,7 +142,7 @@ export const projects: Project[] = [
     demo: 'https://pypi.org/project/datapreptoolkit/',
     productUrl: '',
     ctaLabel: 'Explore',
-    gallery: [withBase('/images/dataPrepToolkit.png')],
+    gallery: [withBase('/images/dataPrepToolkit.jpg')],
     difficulty: 'advanced',
     projectType: 'library',
     ecosystem: 'tool',
@@ -300,7 +300,7 @@ export const projects: Project[] = [
     approach: 'Two scikit-learn models (no-show classification, waiting-time regression) served via FastAPI. Containerized with Docker, deployed to Kubernetes with HPA, automated with GitHub Actions CI/CD. Includes API key auth and Swagger docs.',
     challenges: 'Model serialization and versioning in containers. Kubernetes health probe configuration for ML services needing warm-up. Keeping CI/CD fast while running validation.',
     solution: 'joblib serialization with versioned artifacts, separate readiness/liveness probes, and a CI/CD pipeline that caches dependencies.',
-    impact: 'A production-ready ML microservice architecture demonstrating the full lifecycle: training → containerization → orchestration → CI/CD → monitoring.',
+    impact: 'A production-ready ML microservice architecture covering the full lifecycle: training → containerization → orchestration → CI/CD → monitoring.',
     primaryTechnologies: ['MLOps', 'API Development', 'Containerization', 'CI/CD'],
     secondaryTechnologies: ['Python', 'FastAPI', 'scikit-learn', 'Docker', 'Kubernetes'],
     technologies: ['Python', 'FastAPI', 'scikit-learn', 'Docker', 'Kubernetes', 'GitHub Actions'],
@@ -329,7 +329,7 @@ export const projects: Project[] = [
     approach: 'Local MiniLM embeddings, Qdrant vector search, MongoDB storage, Next.js + Express frontend/API. All ML processing stays on-device.',
     challenges: 'Generating embeddings that capture genre, plot, and style similarity. Configuring Qdrant with proper indexing. Integrating vector search with relational queries.',
     solution: 'MiniLM for efficient embeddings, cosine similarity with HNSW indexing, and an Express API bridging vector search with MongoDB lookups.',
-    impact: 'A fully functional privacy-first recommendation system demonstrating full-stack ML engineering — from embeddings through vector search to UI, with no data leaving the machine.',
+    impact: 'A fully functional privacy-first recommendation system spanning full-stack ML engineering — from embeddings through vector search to UI, with no data leaving the machine.',
     primaryTechnologies: ['Vector Search', 'Semantic Search', 'Full-Stack ML'],
     secondaryTechnologies: ['TypeScript', 'Next.js', 'Qdrant', 'MongoDB', 'MiniLM'],
     technologies: ['TypeScript', 'Next.js', 'Qdrant', 'MongoDB', 'MiniLM', 'Express'],
@@ -380,12 +380,12 @@ export const projects: Project[] = [
     id: 'secure-network-communication',
     title: 'Secure Sender/Receiver + MITM Proxy',
     category: 'networking-cybersecurity',
-    overview: 'An educational network security project demonstrating encryption, traffic interception, and MITM attacks.',
+    overview: 'An educational network security project exploring encryption, traffic interception, and MITM attacks.',
     problem: 'Network security concepts are often taught theoretically. Students need a hands-on tool where they can see encrypted traffic and understand vulnerabilities in real time.',
     approach: 'Three programs: Sender, Receiver, and MITM Proxy. Supports AES (production), SDES, and TEA (educational). Intercepts text, images, audio, and live microphone.',
     challenges: 'Implementing multiple encryption algorithms consistently. Transparent MITM interception. Diverse payload handling.',
     solution: 'Common encryption interface, ARP spoofing for MITM positioning, dedicated handlers per payload type.',
-    impact: 'An educational tool that makes abstract network security concepts tangible, demonstrating why encryption matters.',
+    impact: 'An educational tool that makes abstract network security concepts tangible by showing exactly why encryption matters.',
     primaryTechnologies: ['Network Security', 'Encryption', 'Cryptography', 'Educational Tools'],
     secondaryTechnologies: ['Python', 'AES', 'Tkinter', 'PyAudio'],
     technologies: ['Python', 'AES', 'Tkinter', 'PyAudio'],
@@ -412,7 +412,7 @@ export const projects: Project[] = [
     approach: 'C++ OpenGL 3.2 with Phong lighting, texture mapping, ray picking for annotations, and distance measurement with JSON export.',
     challenges: 'Accurate ray picking, managing multiple models, and auto-normalization for consistent viewing.',
     solution: 'Ray-object intersection via inverse model-view-projection, unit-bounding-box normalization, world-space JSON export.',
-    impact: 'A functional 3D artifact viewer demonstrating low-level graphics programming and interactive 3D application development.',
+    impact: 'A functional 3D artifact viewer exercising low-level graphics programming and interactive 3D application development.',
     primaryTechnologies: ['Computer Graphics', '3D Rendering', 'Interactive Applications'],
     secondaryTechnologies: ['C++', 'OpenGL 3.2', 'GLM'],
     technologies: ['C++', 'OpenGL 3.2', 'GLM'],
@@ -483,7 +483,7 @@ export const projects: Project[] = [
     approach: 'Hybrid child storage (array for dense nodes, map for sparse), frequency tracking for autocomplete, recursive traversal, and safe memory management.',
     challenges: 'Memory layout and autocomplete ranking by frequency rather than alphabetical order.',
     solution: 'Hybrid child node system switches by node density. Autocomplete uses a priority queue of (frequency, word) pairs.',
-    impact: 'A production-quality Trie implementation demonstrating algorithmic thinking and software design.',
+    impact: 'A production-quality Trie implementation that rewards careful algorithmic thinking and software design.',
     primaryTechnologies: ['Data Structures', 'Algorithms', 'String Processing'],
     secondaryTechnologies: ['C++'],
     technologies: ['C++'],
@@ -512,7 +512,7 @@ export const projects: Project[] = [
     approach: 'BigInt as a vector of base-10^9 digits with full operator overloading. Karatsuba multiplication and long division.',
     challenges: 'Sub-quadratic multiplication, arbitrary-precision division, and consistent negative-number handling.',
     solution: 'Karatsuba for large operands, long division with base-10^9 digits, and sign tracked separately from magnitude.',
-    impact: 'A functional arbitrary-precision integer library demonstrating algorithmic depth and disciplined engineering.',
+    impact: 'A functional arbitrary-precision integer library built on algorithmic depth and disciplined engineering.',
     primaryTechnologies: ['Algorithms', 'Numerical Computing', 'Arbitrary Precision'],
     secondaryTechnologies: ['C++'],
     technologies: ['C++'],
@@ -557,7 +557,7 @@ export const projects: Project[] = [
     id: 'hospital-management',
     title: 'Hospital Management System',
     category: 'software-engineering',
-    overview: 'A console-based hospital management system demonstrating OOP and data structures for patient/doctor management and appointment booking.',
+    overview: 'A console-based hospital management system applying OOP and data structures to patient/doctor management and appointment booking.',
     primaryTechnologies: ['Object-Oriented Programming', 'System Design'],
     secondaryTechnologies: ['C++'],
     technologies: ['C++'],
@@ -625,7 +625,7 @@ export const projects: Project[] = [
     approach: 'Fixed-timestep game loop, tile-based rendering, AABB collision detection, gravity, and enemy patrol AI.',
     challenges: 'Console rendering flicker, tile-map collisions, and responsive physics at console frame rates.',
     solution: 'Double-buffered rendering, spatial partitioning for collisions, and tunable gravity/jump.',
-    impact: 'A playable platformer in an unconventional medium, demonstrating game fundamentals without engine abstractions.',
+    impact: 'A playable platformer in an unconventional medium — pure ASCII game fundamentals without engine abstractions.',
     primaryTechnologies: ['Game Development', 'Console Graphics', 'Physics Simulation'],
     secondaryTechnologies: ['C++', 'Windows Console'],
     technologies: ['C++'],
@@ -699,9 +699,21 @@ export const projectCategories = [
   { id: 'networking-cybersecurity', label: 'Networking & Cybersecurity', icon: '🔒' },
   { id: 'algorithms', label: 'Algorithms & Data Structures', icon: '🔤' },
   { id: 'game-development', label: 'Game Development', icon: '🎮' },
-  { id: 'web-applications', label: 'Web Applications', icon: '🌐' },
 ] as const
 
 export const flagshipProjectIds = ['ai-pharaoh', 'meridian-wings']
 
 export const ecosystemToolIds = ['auto-eda', 'auto-analytics', 'data-prep-toolkit', 'auto-bi', 'web-scraping-toolkit']
+
+export const indexPriorityIds = ['auto-bi', 'auto-eda', 'auto-analytics', 'data-prep-toolkit', 'web-scraping-toolkit', 'ai-pharaoh', 'meridian-wings']
+
+export function projectCtaUrl(project: Pick<Project, 'productUrl' | 'demo'>): string {
+  return project.productUrl || project.demo || ''
+}
+
+export function allIndexedProjectIds(): string[] {
+  const secondary = projects
+    .filter((p) => !flagshipProjectIds.includes(p.id) && !ecosystemToolIds.includes(p.id))
+    .map((p) => p.id)
+  return [...new Set([...indexPriorityIds, ...secondary])]
+}

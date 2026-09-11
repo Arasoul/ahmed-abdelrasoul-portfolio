@@ -1,5 +1,8 @@
 import type { Experience } from '../types'
 
+export const currentExperienceOrder = ['depi', 'ecu']
+export const pastExperienceOrder = ['dolab', 'fuzetek', 'amit']
+
 export const experiences: Experience[] = [
   {
     id: 'depi',
@@ -54,6 +57,7 @@ export const experiences: Experience[] = [
     role: 'AI & Machine Learning Intern',
     type: 'internship',
     period: 'July 2023 - March 2024',
+    current: false,
     overview:
       'Completed an intensive AI program covering supervised and unsupervised learning, computer vision, and NLP. The program emphasized hands-on implementation — building models from scratch, training pipelines, and evaluating on real datasets rather than relying on high-level abstractions.',
     responsibilities: [
@@ -83,6 +87,7 @@ export const experiences: Experience[] = [
     role: 'Software Engineering Trainee',
     type: 'internship',
     period: 'July 2025 - September 2025',
+    current: false,
     overview:
       'Developed core software engineering skills through hands-on projects in C++ and Python. The internship emphasized writing maintainable code, following OOP principles, implementing data structures from scratch, and practicing disciplined testing and debugging.',
     responsibilities: [
@@ -136,6 +141,7 @@ export const experiences: Experience[] = [
     role: 'Data Analysis Trainee',
     type: 'internship',
     period: 'January 2026 - April 2026',
+    current: false,
     overview:
       'Focused on practical data analytics — cleaning, transforming, analyzing, and visualizing datasets to generate actionable business insights using SQL, Power BI, and Python.',
     responsibilities: [
@@ -151,52 +157,14 @@ export const experiences: Experience[] = [
     technologies: ['Power BI', 'SQL', 'Excel', 'Python'],
     skills: ['Data Cleaning', 'Data Preparation', 'Exploratory Data Analysis', 'SQL', 'Power BI', 'Data Visualization', 'Business Insights'],
   },
-  {
-    id: 'voidspark',
-    company: 'VoidSpark Studio',
-    role: 'Co-Founder',
-    type: 'co-founder',
-    period: 'July 2026 - Present',
-    current: true,
-    overview:
-      'Co-founded VoidSpark Studio to design and develop intelligent interactive experiences. Responsible for defining the technical architecture, building core game systems in Unity, and researching AI-driven gameplay features.',
-    responsibilities: [
-      'Defined the technical architecture and development roadmap, establishing coding standards and version control workflows',
-      'Designed and implemented core game systems — input handling, physics integration, scene management, and UI frameworks — in Unity with C#',
-      'Prototyping AI-driven gameplay features including pathfinding, behavior trees, and procedural content generation',
-      'Building reusable game frameworks to accelerate future project development',
-    ],
-    achievements: [
-      'Designed the studio technical architecture with component-based game objects, event-driven communication, and a scriptable object data layer',
-      'Built prototype projects demonstrating AI pathfinding, interactive systems, and procedural content',
-    ],
-    technologies: ['Unity', 'C#', 'C++', 'Game Architecture', 'Git'],
-    skills: ['Game Development', 'AI for Games', 'Interactive Systems', 'Software Architecture', 'Technical Leadership', 'Rapid Prototyping'],
-    projects: [
-      {
-        name: 'TicTacPro',
-        description: 'AI game prototype — Tic-Tac-Toe with Minimax AI demonstrating game tree search and alpha-beta pruning.',
-        technologies: ['C++', 'Game AI', 'Algorithms'],
-        link: 'https://github.com/Arasoul/TicTacPro-Smart-XO-Game-Human-vs-AI-',
-      },
-      {
-        name: 'Console Platformer Quest',
-        description: 'Game engine prototype — ASCII platformer with physics, collision detection, level progression, and enemy AI, built without a game engine.',
-        technologies: ['C++', 'Game Development'],
-        link: 'https://github.com/Arasoul/Console-Platformer-Quest',
-      },
-      {
-        name: '2048',
-        description: 'Game prototype — 2048 puzzle with custom graphics, animations, and sound effects.',
-        technologies: ['C#', 'Game Development'],
-        link: 'https://github.com/Arasoul/2048',
-      },
-      {
-        name: 'Tower of Hanoi',
-        description: 'Game prototype — interactive Tower of Hanoi with drag-and-drop and recursive solution visualization.',
-        technologies: ['C#', 'Algorithms'],
-        link: 'https://github.com/Arasoul/Tower-of-Hanoi',
-      },
-    ],
-  },
 ]
+
+const byId = (id: string): Experience | undefined => experiences.find((e) => e.id === id)
+
+export const currentExperiences: Experience[] = currentExperienceOrder
+  .map(byId)
+  .filter((e): e is Experience => Boolean(e))
+
+export const pastExperiences: Experience[] = pastExperienceOrder
+  .map(byId)
+  .filter((e): e is Experience => Boolean(e))

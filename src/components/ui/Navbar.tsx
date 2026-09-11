@@ -5,6 +5,7 @@ import { navLinks } from '../../data/personal'
 import logo from '../../assets/Logo.png'
 import ThemeToggle from './ThemeToggle'
 import { scrollToHash } from '../../utils/scroll'
+import { useActiveChapter } from '../../hooks/useActiveChapter'
 
 interface Props {
   dark: boolean
@@ -17,8 +18,8 @@ const SECTION_COUNT = navLinks.length
 export default function Navbar({ dark, toggleTheme, onOpenPalette }: Props) {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const [activeSection, setActiveSection] = useState('')
   const fillRef = useRef<HTMLDivElement | null>(null)
+  const activeSection = useActiveChapter()
 
   useEffect(() => {
     let raf = 0
@@ -34,27 +35,12 @@ export default function Navbar({ dark, toggleTheme, onOpenPalette }: Props) {
       })
     }
 
-    const sectionIds = navLinks.map((l) => l.href.slice(1))
-    const spy = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) setActiveSection(entry.target.id)
-        }
-      },
-      { rootMargin: '-40% 0px -55% 0px', threshold: 0 },
-    )
-    for (const id of sectionIds) {
-      const el = document.getElementById(id)
-      if (el) spy.observe(el)
-    }
-
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onScroll)
     return () => {
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onScroll)
-      spy.disconnect()
       if (raf) window.cancelAnimationFrame(raf)
     }
   }, [])

@@ -30,8 +30,8 @@ export default function HomePage() {
       <Suspense fallback={<div className="min-h-[40vh]" />}>
         <SystemsProducts />
       </Suspense>
-      <Engineering />
       <Experience />
+      <Engineering />
       <Currently />
       <Contact />
       <Suspense fallback={null}>

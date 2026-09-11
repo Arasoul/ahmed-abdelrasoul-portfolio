@@ -4,6 +4,7 @@ import { FiSend, FiMail, FiMapPin, FiGithub, FiLinkedin, FiCheck, FiDownload, Fi
 import { personalInfo } from '../../data/personal'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 import { CONTACT_ACCESS_KEY, CONTACT_ENDPOINT, CONTACT_EMAIL } from '../../config/contact'
+import { chapterNumber } from '../../data/chapters'
 
 type FormStatus = 'idle' | 'sending' | 'sent' | 'error'
 
@@ -68,7 +69,7 @@ export default function Contact() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={revealed ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5 }} className="section-head"
           >
-            <span className="section-index">07 / 07</span>
+            <span className="section-index">{chapterNumber('connect')}</span>
             <h2 className="section-title-left">Connect</h2>
             <div className="section-rule" />
           </motion.div>

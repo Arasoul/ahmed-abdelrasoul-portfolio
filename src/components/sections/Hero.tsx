@@ -3,14 +3,12 @@ import { motion } from 'framer-motion'
 import { FiArrowRight, FiArrowDown, FiGithub, FiLinkedin, FiMail, FiDownload } from 'react-icons/fi'
 import { personalInfo } from '../../data/personal'
 import { withBase } from '../../utils/assetPath'
+import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion'
 
 const heroFrames = [
   { src: withBase('/images/hero-dark.jpg'), label: 'Portrait' },
   { src: withBase('/images/me-light.jpg'), label: 'Studio' },
 ]
-
-const prefersReducedMotion =
-  typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
 const systemMap = [
   { stage: 'PREPARE', name: 'DataPrepToolkit', color: 'var(--accent-secondary)' },
@@ -23,13 +21,15 @@ const systemMap = [
 
 export default function Hero({ dark = true }: { dark?: boolean }) {
   const [frame, setFrame] = useState(() => (dark ? 0 : 1))
+  const prefersReducedMotion = usePrefersReducedMotion()
 
   useEffect(() => {
+    if (prefersReducedMotion) return
     const t = window.setInterval(() => {
       setFrame((f) => (f + 1) % heroFrames.length)
     }, 6000)
     return () => window.clearInterval(t)
-  }, [])
+  }, [prefersReducedMotion])
 
   return (
     <section id="origin" data-section="origin" className="relative flex min-h-screen items-center overflow-hidden px-4 pt-24 pb-16">

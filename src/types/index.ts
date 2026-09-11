@@ -1,7 +1,7 @@
 export interface Project {
   id: string
   title: string
-  category: 'ai-ml' | 'computer-vision-nlp' | 'data-science' | 'python-libraries' | 'software-engineering' | 'networking-cybersecurity' | 'algorithms' | 'game-development' | 'web-applications'
+  category: 'ai-ml' | 'computer-vision-nlp' | 'data-science' | 'python-libraries' | 'software-engineering' | 'networking-cybersecurity' | 'algorithms' | 'game-development'
   type?: string
   featured?: boolean
   overview: string
@@ -58,7 +58,7 @@ export interface Experience {
   role: string
   type: 'full-time' | 'internship' | 'co-founder'
   period: string
-  current?: boolean
+  current: boolean
   location?: string
   overview?: string
   focus?: ExperienceFocus[]

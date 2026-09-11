@@ -2,11 +2,12 @@ import { useState, useCallback, useMemo, type CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { FiArrowDown, FiExternalLink, FiChevronRight, FiGithub, FiArrowRight } from 'react-icons/fi'
-import { projects, flagshipProjectIds, ecosystemToolIds, projectCategories } from '../../data/projects'
+import { projects, flagshipProjectIds, ecosystemToolIds, projectCategories, indexPriorityIds, projectCtaUrl } from '../../data/projects'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 import { projectTopics, projectsForTopics } from '../../utils/projectTopics'
 import { scrollToElement } from '../../utils/scroll'
 import { usePortfolio } from '../../hooks/usePortfolio'
+import { chapterNumber } from '../../data/chapters'
 import AutoBIPipeline from '../visuals/AutoBIPipeline'
 import MeridianNetwork from '../visuals/MeridianNetwork'
 import PharaohPipeline from '../visuals/PharaohPipeline'
@@ -26,14 +27,12 @@ const autoBI = projects.find((p) => p.id === 'auto-bi')
 
 const secondary = projects.filter((p) =>
   !ecosystemToolIds.includes(p.id) && !flagshipProjectIds.includes(p.id)
-).slice(0, 6)
-
-const indexPriority = ['auto-bi', 'auto-eda', 'data-prep-toolkit', 'web-scraping-toolkit', 'ai-pharaoh', 'meridian-wings']
+)
 
 const indexRows = (() => {
   const seen = new Set<string>()
   const rows: NonNullable<(typeof flagships)[number]>[] = []
-  for (const id of [...indexPriority, ...secondary.map((p) => p.id)]) {
+  for (const id of [...indexPriorityIds, ...secondary.map((p) => p.id)]) {
     const p = projects.find((x) => x.id === id)
     if (p && !seen.has(p.id)) {
       seen.add(p.id)
@@ -43,11 +42,11 @@ const indexRows = (() => {
   return rows
 })()
 
-function ProductCta({ project }: { project: { productUrl?: string; ctaLabel?: string } }) {
-  const hasUrl = Boolean(project.productUrl)
-  if (hasUrl) {
+function ProductCta({ project }: { project: { productUrl?: string; demo?: string; ctaLabel?: string } }) {
+  const url = projectCtaUrl(project)
+  if (url) {
     return (
-      <a href={project.productUrl} target="_blank" rel="noopener noreferrer" className="product-cta product-cta--active">
+      <a href={url} target="_blank" rel="noopener noreferrer" className="product-cta product-cta--active">
         <FiExternalLink size={11} /> {project.ctaLabel || 'Explore Product'}
       </a>
     )
@@ -280,7 +279,7 @@ export default function SystemsProducts() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={revealed ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5 }}
           className="section-head"
         >
-          <span className="section-index">05 /</span>
+          <span className="section-index">{chapterNumber('systems')}</span>
           <h2 className="section-title-left">Systems &amp; Products</h2>
           <div className="section-rule" />
         </motion.div>

@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { FiZap, FiUsers, FiBox, FiGithub, FiExternalLink } from 'react-icons/fi'
 import type { CSSProperties } from 'react'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
+import { chapterNumber } from '../../data/chapters'
 
 const directions = [
   {
@@ -37,7 +38,7 @@ export default function Currently() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={revealed ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5 }}
           className="section-head"
         >
-          <span className="section-index">06 / 07</span>
+          <span className="section-index">{chapterNumber('now')}</span>
           <h2 className="section-title-left">Now</h2>
           <div className="section-rule" />
         </motion.div>

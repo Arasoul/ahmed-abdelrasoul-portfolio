@@ -3,6 +3,7 @@ import { FiArrowRight } from 'react-icons/fi'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 import { projects } from '../../data/projects'
 import { Link } from 'react-router-dom'
+import { chapterNumber } from '../../data/chapters'
 
 const capabilities = [
   {
@@ -74,7 +75,7 @@ export default function Engineering() {
           transition={{ duration: 0.5 }}
           className="section-head"
         >
-          <span className="section-index">04 / 07</span>
+          <span className="section-index">{chapterNumber('engineering')}</span>
           <h2 className="section-title-left">Engineering</h2>
           <div className="section-rule" />
         </motion.div>

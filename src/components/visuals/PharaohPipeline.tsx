@@ -60,7 +60,7 @@ export default function PharaohPipeline() {
   const showMasks = step >= 2
   const showOrder = step >= 4
 
-  const imgSrc = withBase('/images/pharouh.png')
+  const imgSrc = withBase('/images/pharouh.jpg')
 
   return (
     <div ref={rootRef} className="pharaoh-visual">

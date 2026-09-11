@@ -6,6 +6,7 @@ import type { AssistantReference } from '../../utils/assistant'
 import { streamChat, llmConfigured, topReferences } from '../../utils/llm'
 import { projects } from '../../data/projects'
 import { scrollToHash } from '../../utils/scroll'
+import { useFocusTrap } from '../../hooks/useFocusTrap'
 
 interface Message {
   id: number
@@ -34,21 +35,15 @@ export default function PortfolioAssistant() {
   const [streaming, setStreaming] = useState(false)
   const listRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+  const panelRef = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
   const llmMode = llmConfigured()
+
+  useFocusTrap(panelRef, open, () => setOpen(false))
 
   useEffect(() => {
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: 'smooth' })
   }, [messages, open])
-
-  useEffect(() => {
-    if (!open) return
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false)
-    }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [open])
 
   useEffect(() => {
     if (open) {
@@ -95,10 +90,11 @@ export default function PortfolioAssistant() {
         )
       }
     } catch {
+      const fallback = answer(text)
       setMessages((m) =>
         m.map((msg) =>
           msg.id === asstId
-            ? { ...msg, text: 'The LLM endpoint could not be reached, so I fell back to local retrieval. Try one of the suggested prompts below.' }
+            ? { ...msg, text: fallback.text, references: fallback.references }
             : msg
         )
       )
@@ -134,7 +130,7 @@ export default function PortfolioAssistant() {
 
       {open && (
         <div id="portfolio-assistant-panel" role="dialog" aria-label="Portfolio intelligence assistant"
-          className="pa-panel">
+          className="pa-panel" ref={panelRef}>
           <header className="pa-header">
             <div>
               <p className="pa-title"><span className="pa-caret">▸</span> PORTFOLIO INTELLIGENCE</p>

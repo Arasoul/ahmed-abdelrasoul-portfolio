@@ -1,10 +1,10 @@
 import { projects } from '../data/projects'
-import { experiences } from '../data/experience'
+import { currentExperiences, pastExperiences } from '../data/experience'
 import { capabilityGroups } from '../data/skills'
 import { personalInfo } from '../data/personal'
 import { certifications } from '../data/certifications'
 import { projectTopics } from './projectTopics'
-import type { Project } from '../types'
+import type { Project, Experience as ExperienceEntry } from '../types'
 
 export interface AssistantReference {
   id: string
@@ -119,7 +119,7 @@ export function answer(query: string): AssistantAnswer {
 
   // Current work
   if (hasAny(q, ['currently', 'working on', 'doing now', 'now building', 'right now', 'focus', 'productiz', 'automation trainee'])) {
-    const current = experiences.filter((e) => e.current)
+    const current = currentExperiences
     return {
       text: `Ahmed is building intelligent systems while expanding practical expertise in AI-powered automation. He is currently:\n\n${current.map((e) => `• ${e.role} — ${e.company} (${e.period})`).join('\n')}\n\nHe is also moving completed data and AI systems (AutoBI, AutoEDA, AutoAnalytics, DataPrepToolkit, Web Scraping Toolkit) toward productization and public release.`,
       references: [
@@ -131,8 +131,10 @@ export function answer(query: string): AssistantAnswer {
 
   // Experience / roles
   if (hasAny(q, ['experience', 'career', 'job', 'role', 'roles', 'teaching', 'ta ', 'depi', 'internship', 'assistant', 'work history', 'employed'])) {
+    const typeWord = (t: ExperienceEntry['type']) =>
+      t === 'full-time' ? 'Full-time' : t === 'internship' ? 'Internship' : 'Co-Founder'
     return {
-      text: `Ahmed's current roles:\n\n• Teaching Assistant — Egyptian Chinese University (Full-time, Aug 2026 — Present)\n  Supporting students' technical understanding through practical guidance and hands-on learning.\n\n• AI Automation Trainee — Digital Egypt Pioneers Initiative (DEPI) (Internship, Aug 2026 — Present)\n  Building practical AI-powered automation workflows with n8n, AI agents, APIs, and prompt engineering.\n\nEarlier: AI & ML Intern (AMIT), Software Engineering Trainee (Fuzetek), Data Analysis Trainee (DoLab Academy), Co-Founder (VoidSpark Studio).`,
+      text: `Ahmed's current roles:\n\n${currentExperiences.map((e) => `• ${e.role} — ${e.company} (${typeWord(e.type)}, ${e.period})\n  ${e.overview ?? ''}`).join('\n\n')}\n\nEarlier: ${pastExperiences.map((e) => `${e.role} (${e.company})`).join(', ')}.`,
       references: [{ id: 'experience', label: 'See the Experience section', kind: 'section' }],
     }
   }
@@ -229,7 +231,7 @@ export function answer(query: string): AssistantAnswer {
     let list = projects.filter((p) => topicIds.some((t) => projectTopics.find((x) => x.id === t)?.projectIds.includes(p.id)))
     const unique = new Map(list.map((p) => [p.id, p]))
     list = [...unique.values()]
-    const topList = list.filter((p) => flagOr(p, ['auto-bi', 'auto-eda', 'auto-analytics', 'data-prep-toolkit', 'web-scraping-toolkit']))
+    const topList = list.filter((p) => ['auto-bi', 'auto-eda', 'auto-analytics', 'data-prep-toolkit', 'web-scraping-toolkit'].includes(p.id))
     return {
       text: `Data & analytics systems:\n\n${topList.map((p) => `• ${p.title} — ${p.overview}`).join('\n\n')}\n\nAutoEDA is a deterministic analytical system (187 tests passing · 92.5% coverage) — it automates repetitive analysis without hiding the statistical reasoning.`,
       references: topList.map(projectRef),
@@ -284,10 +286,6 @@ export function answer(query: string): AssistantAnswer {
   return {
     text: `I couldn't match that against the portfolio knowledge base.\n\nTry one of these:\n${suggestions.map((s) => `• ${s}`).join('\n')}\n\nor ask about a specific system, topic, or skill.`,
   }
-}
-
-function flagOr(p: Project, ids: string[]): boolean {
-  return ids.includes(p.id)
 }
 
 export { suggestions }

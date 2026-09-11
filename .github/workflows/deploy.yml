@@ -42,6 +42,10 @@ jobs:
       - name: Build for GitHub Pages
         env:
           VITE_GITHUB_PAGES: "true"
+          # Web3Forms access keys are designed for client-side use (not secrets).
+          # When the repository secret is absent the contact form falls back to a
+          # mailto: draft, which is the documented intent for this mirror deployment.
+          VITE_WEB3FORMS_ACCESS_KEY: ${{ secrets.WEB3FORMS_ACCESS_KEY }}
         run: npm run build
 
       - name: Setup Pages

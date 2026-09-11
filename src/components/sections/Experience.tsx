@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { CSSProperties } from 'react'
 import {
@@ -6,10 +6,13 @@ import {
   FiTerminal, FiMessageCircle, FiTool, FiShare2, FiChevronDown, FiAward,
   FiMaximize2, FiChevronLeft, FiChevronRight, FiX,
 } from 'react-icons/fi'
-import { experiences } from '../../data/experience'
+import { currentExperiences, pastExperiences } from '../../data/experience'
+import { personalInfo } from '../../data/personal'
 import { certifications } from '../../data/certifications'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
+import { useFocusTrap } from '../../hooks/useFocusTrap'
 import type { Experience as ExperienceEntry, Certification } from '../../types'
+import { chapterNumber } from '../../data/chapters'
 
 const typeLabel: Record<ExperienceEntry['type'], string> = {
   'full-time': 'Full-time',
@@ -17,16 +20,8 @@ const typeLabel: Record<ExperienceEntry['type'], string> = {
   'co-founder': 'Co-Founder',
 }
 
-const currentOrder = ['depi', 'ecu']
-const pastOrder = ['voidspark', 'dolab', 'fuzetek', 'amit']
-
-const current = currentOrder
-  .map((id) => experiences.find((e) => e.id === id))
-  .filter((e): e is ExperienceEntry => Boolean(e))
-
-const past = pastOrder
-  .map((id) => experiences.find((e) => e.id === id))
-  .filter((e): e is ExperienceEntry => Boolean(e))
+const current = currentExperiences
+const past = pastExperiences
 
 const trackOf = (id: string) =>
   id === 'depi'
@@ -44,6 +39,9 @@ function CredentialsModule({ revealed }: { revealed: boolean }) {
   const [open, setOpen] = useState(false)
   const [viewer, setViewer] = useState<Certification | null>(null)
   const [page, setPage] = useState(0)
+  const viewerRef = useRef<HTMLDivElement | null>(null)
+
+  useFocusTrap(viewerRef, Boolean(viewer), () => setViewer(null))
 
   const galleryImages = viewer?.gallery?.length
     ? viewer.gallery
@@ -54,10 +52,6 @@ function CredentialsModule({ revealed }: { revealed: boolean }) {
   useEffect(() => {
     if (!viewer) return
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setViewer(null)
-        return
-      }
       if (galleryImages.length > 1) {
         if (e.key === 'ArrowRight') setPage((p) => (p + 1) % galleryImages.length)
         if (e.key === 'ArrowLeft') setPage((p) => (p - 1 + galleryImages.length) % galleryImages.length)
@@ -162,6 +156,7 @@ function CredentialsModule({ revealed }: { revealed: boolean }) {
             role="dialog"
             aria-modal="true"
             aria-label={`${viewer.title} certificate`}
+            ref={viewerRef}
             onClick={() => setViewer(null)}
           >
             <motion.div
@@ -317,7 +312,7 @@ export default function Experience() {
           transition={{ duration: 0.5 }}
           className="section-head"
         >
-          <span className="section-index">05 / 07</span>
+          <span className="section-index">{chapterNumber('experience')}</span>
           <h2 className="section-title-left">Experience</h2>
           <div className="section-rule" />
         </motion.div>
@@ -377,6 +372,27 @@ export default function Experience() {
                 <span className="exp-history-period">{exp.period}</span>
               </div>
             </motion.div>
+          ))}
+        </div>
+
+        {/* Education */}
+        <div className="exp-divider"><span>Education</span></div>
+
+        <div className="exp-history">
+          {personalInfo.education.map((ed) => (
+            <div key={ed.degree} className="exp-history-row">
+              <div className="flex min-w-0 items-start gap-3">
+                <span className="exp-history-dot" />
+                <div className="min-w-0">
+                  <div className="exp-history-role">{ed.degree}</div>
+                  <div className="exp-history-org">{ed.institution}</div>
+                </div>
+              </div>
+              <div className="exp-history-meta">
+                <span className="exp-history-type">Degree</span>
+                <span className="exp-history-period">{ed.period}</span>
+              </div>
+            </div>
           ))}
         </div>
 

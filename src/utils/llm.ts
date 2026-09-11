@@ -4,37 +4,31 @@ import { capabilityGroups } from '../data/skills'
 import { personalInfo } from '../data/personal'
 
 /**
- * Real LLM transport for PORTFOLIO INTELLIGENCE.
+ * Serverless LLM transport for PORTFOLIO INTELLIGENCE.
  *
- * Configure an OpenAI-compatible chat-completions endpoint in an `.env` file:
- *   VITE_LLM_ENDPOINT=https://api.openai.com/v1/chat/completions
- *   VITE_LLM_API_KEY=sk-...
- *   VITE_LLM_MODEL=gpt-4o-mini
+ * The API key never ships to the browser. The client POSTs an OpenAI-style
+ * message list to /api/portfolio-ai (a serverless function). The function
+ * attaches the private key server-side and streams the completion back.
  *
- * When no endpoint is configured (or the request fails), the assistant falls
- * back to the local structured retrieval engine — the site keeps working.
+ * Server-side environment (e.g. Vercel environment variables — never prefixed
+ * with VITE_):
+ *   LLM_ENDPOINT=https://api.openai.com/v1/chat/completions
+ *   LLM_API_KEY=sk-...
+ *   LLM_MODEL=gpt-4o-mini
+ *
+ * Client-side public flag (no secret — just switches the UI between modes):
+ *   VITE_LLM_ENABLED=true
+ *
+ * When the function is disabled or unreachable, the assistant falls back to
+ * the local structured retrieval engine — the site keeps working.
  */
 
-export interface LLMConfig {
-  endpoint: string
-  apiKey: string
-  model: string
-}
-
-export function llmConfig(): LLMConfig | null {
-  const endpoint = import.meta.env.VITE_LLM_ENDPOINT as string | undefined
-  const apiKey = import.meta.env.VITE_LLM_API_KEY as string | undefined
-  if (!endpoint) return null
-  return {
-    endpoint,
-    apiKey: apiKey ?? '',
-    model: (import.meta.env.VITE_LLM_MODEL as string | undefined) ?? 'gpt-4o-mini',
-  }
-}
-
 export function llmConfigured(): boolean {
-  return llmConfig() !== null
+  return import.meta.env.VITE_LLM_ENABLED === 'true'
 }
+
+const assistantEndpoint = () =>
+  `${(import.meta.env.BASE_URL ?? '/').replace(/\/$/, '')}/api/portfolio-ai`
 
 export function buildSystemPrompt(): string {
   const tools = projects.map(
@@ -111,25 +105,18 @@ export function retrieveCorpus(query: string): string {
     .join('\n')
 }
 
-/** Stream a chat completion from an OpenAI-compatible endpoint. */
+/** Stream a chat completion through the serverless proxy. */
 export async function* streamChat(userQuery: string): AsyncGenerator<string> {
-  const conf = llmConfig()
-  if (!conf) throw new Error('LLM not configured')
-
   const controller = new AbortController()
   const timer = window.setTimeout(() => controller.abort(), 45_000)
   try {
-    const resp = await fetch(conf.endpoint, {
+    const resp = await fetch(assistantEndpoint(), {
       method: 'POST',
       signal: controller.signal,
       headers: {
         'Content-Type': 'application/json',
-        ...(conf.apiKey ? { Authorization: `Bearer ${conf.apiKey}` } : {}),
       },
       body: JSON.stringify({
-        model: conf.model,
-        stream: true,
-        temperature: 0.3,
         messages: [
           { role: 'system', content: buildSystemPrompt() },
           {

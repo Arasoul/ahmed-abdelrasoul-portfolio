@@ -10,9 +10,9 @@ export const certifications: Certification[] = [
     date: '2024',
     credentialId: 'AI & ML Diploma',
     skills: ['Machine Learning', 'Deep Learning', 'Computer Vision', 'NLP', 'MLOps', 'Model Deployment'],
-    image: withBase('/images/AMIT AI1.png'),
+    image: withBase('/images/AMIT AI1.jpg'),
     thumb: withBase('/images/thumbs/AMIT AI1-thumb.jpg'),
-    gallery: [withBase('/images/AMIT AI1.png'), withBase('/images/AMIT AI2.png')],
+    gallery: [withBase('/images/AMIT AI1.jpg'), withBase('/images/AMIT AI2.jpg')],
   },
   {
     id: 'hcia-big-data',
@@ -22,7 +22,7 @@ export const certifications: Certification[] = [
     date: '2024',
     credentialId: 'HCIA Big Data V3.5',
     skills: ['Big Data', 'Hadoop', 'Hive', 'MapReduce', 'Data Storage'],
-    image: withBase('/images/HCIA Big Data V3.5.png'),
+    image: withBase('/images/HCIA Big Data V3.5.jpg'),
     thumb: withBase('/images/thumbs/HCIA Big Data V3.5-thumb.jpg'),
   },
   {
@@ -33,7 +33,7 @@ export const certifications: Certification[] = [
     date: '2024',
     credentialId: 'AI Certificate',
     skills: ['Artificial Intelligence', 'Problem Solving', 'AI Ethics', 'Intelligent Systems'],
-    image: withBase('/images/impact AI.png'),
+    image: withBase('/images/impact AI.jpg'),
     thumb: withBase('/images/thumbs/impact AI-thumb.jpg'),
   },
   {
@@ -44,9 +44,9 @@ export const certifications: Certification[] = [
     date: '2024',
     credentialId: 'Cybersecurity Certificate',
     skills: ['Network Security', 'Threat Detection', 'Security Fundamentals', 'Risk Assessment'],
-    image: withBase('/images/Cyber Security BUE1.png'),
+    image: withBase('/images/Cyber Security BUE1.jpg'),
     thumb: withBase('/images/thumbs/Cyber Security BUE1-thumb.jpg'),
-    gallery: [withBase('/images/Cyber Security BUE1.png'), withBase('/images/Cyber Security BUE2.png')],
+    gallery: [withBase('/images/Cyber Security BUE1.jpg'), withBase('/images/Cyber Security BUE2.jpg')],
   },
   {
     id: 'zewail-ml-dl',
@@ -56,9 +56,9 @@ export const certifications: Certification[] = [
     date: '2024',
     credentialId: 'ML/DL Certificate',
     skills: ['Machine Learning', 'Deep Learning', 'Neural Networks', 'Model Optimization', 'TensorFlow'],
-    image: withBase('/images/zewail AI1.png'),
+    image: withBase('/images/zewail AI1.jpg'),
     thumb: withBase('/images/thumbs/zewail AI1-thumb.jpg'),
-    gallery: [withBase('/images/zewail AI1.png'), withBase('/images/zewail AI2.png')],
+    gallery: [withBase('/images/zewail AI1.jpg'), withBase('/images/zewail AI2.jpg')],
   },
   {
     id: 'bue-project-management',
@@ -68,9 +68,9 @@ export const certifications: Certification[] = [
     date: '2024',
     credentialId: 'PM Certificate',
     skills: ['Project Planning', 'Agile Methodologies', 'Risk Management', 'Team Leadership'],
-    image: withBase('/images/Project management BUE1.png'),
+    image: withBase('/images/Project management BUE1.jpg'),
     thumb: withBase('/images/thumbs/Project management BUE1-thumb.jpg'),
-    gallery: [withBase('/images/Project management BUE1.png'), withBase('/images/Project management BUE2.png')],
+    gallery: [withBase('/images/Project management BUE1.jpg'), withBase('/images/Project management BUE2.jpg')],
   },
   {
     id: 'fuzetek-se',
@@ -93,7 +93,7 @@ export const certifications: Certification[] = [
     skills: ['Data Analysis', 'Data Cleaning', 'SQL', 'Power BI', 'Data Visualization', 'Dashboard Development', 'Business Intelligence'],
     image: withBase('/images/Dolab.jpg'),
     thumb: withBase('/images/thumbs/Dolab-thumb.jpg'),
-    gallery: [withBase('/images/Dolab.jpg'), withBase('/images/Dolab-DA.png'), withBase('/images/Dolab-practical.png')],
+    gallery: [withBase('/images/Dolab.jpg'), withBase('/images/Dolab-DA.jpg'), withBase('/images/Dolab-practical.jpg')],
   },
   {
     id: 'itida-freelancing',
@@ -115,7 +115,7 @@ export const certifications: Certification[] = [
     date: '2024',
     credentialId: 'AI Ambassador Certificate',
     skills: ['Artificial Intelligence', 'Leadership', 'Community Engagement', 'Communication'],
-    image: withBase('/images/Ambassador Certificate AI.png'),
+    image: withBase('/images/Ambassador Certificate AI.jpg'),
     thumb: withBase('/images/thumbs/Ambassador Certificate AI-thumb.jpg'),
   },
 ]

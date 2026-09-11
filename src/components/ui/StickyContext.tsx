@@ -1,51 +1,26 @@
-import { useEffect, useState } from 'react'
+import { chapters } from '../../data/chapters'
+import { useActiveChapter } from '../../hooks/useActiveChapter'
 
-const sections: { id: string; label: string; context?: string; mode?: string }[] = [
-  { id: 'origin', label: 'IDENTITY', context: 'ORIGIN' },
-  { id: 'map', label: 'DOMAIN MAP' },
-  { id: 'systems', label: 'SYSTEMS', context: 'SYSTEM DIRECTORY', mode: 'BROWSE' },
-  { id: 'engineering', label: 'ENGINEERING', context: 'CAPABILITIES & METHOD' },
-  { id: 'experience', label: 'EXPERIENCE', context: 'CREDENTIALS' },
-  { id: 'now', label: 'CURRENT FOCUS' },
-  { id: 'connect', label: 'CONNECT', mode: 'BUILD TOGETHER' },
-]
+const context: Record<string, { label: string; context?: string; mode?: string }> = {
+  origin: { label: 'IDENTITY', context: 'ORIGIN' },
+  map: { label: 'DOMAIN MAP' },
+  systems: { label: 'SYSTEMS', context: 'SYSTEM DIRECTORY', mode: 'BROWSE' },
+  experience: { label: 'EXPERIENCE', context: 'CREDENTIALS' },
+  engineering: { label: 'ENGINEERING', context: 'CAPABILITIES & METHOD' },
+  now: { label: 'CURRENT FOCUS' },
+  connect: { label: 'CONNECT', mode: 'BUILD TOGETHER' },
+}
+
+const sections = chapters.map((ch) => ({
+  id: ch.id,
+  ...(context[ch.id] ?? { label: ch.label }),
+}))
 
 export default function StickyContext() {
-  const [active, setActive] = useState('origin')
+  const active = useActiveChapter()
 
-  useEffect(() => {
-    let raf = 0
-    const update = () => {
-      raf = 0
-      const mid = window.innerHeight * 0.4
-      let cur = sections[0].id
-      let best = Infinity
-      for (const s of sections) {
-        const el = document.getElementById(s.id)
-        if (!el) continue
-        const d = Math.abs(el.getBoundingClientRect().top - mid)
-        if (d < best) {
-          best = d
-          cur = s.id
-        }
-      }
-      setActive(cur)
-    }
-    const onScroll = () => {
-      if (!raf) raf = requestAnimationFrame(update)
-    }
-    update()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', onScroll)
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('resize', onScroll)
-      if (raf) cancelAnimationFrame(raf)
-    }
-  }, [])
-
-  const current = sections.find((s) => s.id === active)
   const idx = sections.findIndex((s) => s.id === active)
+  const current = sections[idx]
 
   return (
     <aside className="sticky-context" aria-hidden="true">
